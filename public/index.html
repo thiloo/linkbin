@@ -8,14 +8,25 @@
         <script src="client.js"></script>
     </head>
     <body ng-app="linkbinApp">
-        <div ng-controller="frontPageList">
-            <div ng-repeat="link in links" id="link-id" class="fpLinkContainer">
-                <a href="{{link.link}}" class="fpLinkHeadline">{{link.headline_in_link}}</a><br />
-                <a href="#" class="fpLinkTitle">{{link.given_title}}</a><br />
-                <a href="#" class="fpLinkDescription">{{link.num_of_comments}} comments</a> |
-                <a href="#" class="fpLinkDescription">{{link.username}}</a> |
-                <a href="#" class="fpLinkDescription">{{link.created_at}}</a>
+        <div ng-controller="frontPageListView">
+            <div ng-repeat="link in links" id="link-id" class="fpLinkContainer" >
+                <div class="fpVoteCountContainer">
+                    <img class="fpUpVote" src="/media/upvote.png" />
+                    <p class="fpVoteCount">{{link.votes}}</p>
+                    <img class="fpDownVote" src="/media/downvote.png" />
+                </div>
+                <div class="fpLinkContentContainer">
+                    <a href="{{link.link}}" class="fpLinkHeadline">{{link.headline_in_link}}</a><br />
+                    <a href="/{{link.id}}" class="fpLinkTitle">{{link.given_title}}</a><br />
+                    <a href="/{{link.id}}" class="fpLinkDescription">{{link.num_of_comments}} comments</a> |
+                    <a href="/{{link.id}}" class="fpLinkDescription">{{link.username}}</a> |
+                    <a href="/{{link.id}}" class="fpLinkDescription">{{link.created_at | date : format : timezone }}</a>
+                </div>
             </div>
+        </div>
+
+        <div ng-controller="singleLinkView">
+
         </div>
     </body>
 </html>
