@@ -1,0 +1,27 @@
+{
+  "name": "linkbin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thiloo/linkbin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thiloo/linkbin/issues"
+  },
+  "homepage": "https://github.com/thiloo/linkbin#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "csurf": "^1.9.0",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "pg": "^6.1.0"
+  }
+}
