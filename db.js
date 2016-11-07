@@ -1,5 +1,5 @@
 var pg = require('pg');
-var password = require('password.json');
+var password = require('./password.json');
 var dbUrl = `postgres://${password.user}:${password.password}@localhost:5432/linkbin`;
 
 dbUrl = require('url').parse(dbUrl);
