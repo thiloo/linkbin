@@ -36,6 +36,25 @@ exports.linksDetails = function() {
     });
 };
 
+exports.getLinkDetails = function(id) {
+    return getFromDb('SELECT * FROM links WHERE id=$1', [id]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+exports.getLinkComments = function(id) {
+    return getFromDb('SELECT * FROM comments WHERE image_id=$1 ORDER BY created_at DESC LIMIT 30',[id]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
 
 
 
