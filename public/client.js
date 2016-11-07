@@ -5,8 +5,11 @@
         $scope.load = () => {
             $http.get('/homepage')
             .then(content => {
-                $scope.links = content.data;
-            });
+                console.log(content);
+                $scope.links = content.data.file;
+                console.log($scope);
+            })
+            .catch(error => console.log(error));
         };
         $scope.load();
     });

@@ -3,9 +3,15 @@
     width: 80%;
 }
 
-.fpLinkTitle {
+.fpLinkHeadline {
     font-size: 28px;
     color: blue;
+    text-decoration: none;
+}
+
+.fpLinkTitle {
+    font-size: 24px;
+    color: grey;
     text-decoration: none;
 }
 

@@ -17,7 +17,7 @@ app.use(express.static('public'));
 
 app.get('/homepage', function(req, res) {
 
-    db.getImages().then(function(result) {
+    db.linksDetails().then(function(result) {
         res.json({
             success:true,
             file: result.rows
