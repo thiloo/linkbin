@@ -1,6 +1,10 @@
 var pg = require('pg');
 var password = require('password.json');
+<<<<<<< HEAD
 var dbUrl = 'postgres://spicedling:036363976@localhost:5432/linkbin';
+=======
+var dbUrl = `postgres://${password.user}:${password.password}@localhost:5432/linkbin`;
+>>>>>>> 0a744d2e1b39c415905e968ebfe287ee070015f9
 
 dbUrl = require('url').parse(dbUrl);
 
