@@ -29,5 +29,24 @@ app.get('/homepage', function(req, res) {
     });
 });
 
+app.get('/:id', function(req, res) {
+    var id = req.url;
+    var linkDetails = db.getLinkDetails(id);
+    var linkComments = db.getLinkComments(id);
+    return Promise.all([linkDetails, linkComments]).then(function(results) {
+        var result = {};
+        result.link = results[0].rows;
+        result.comments = results[1].rows;
+        res.json({
+            success:true,
+            file:result
+        });
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+})
+
 
 app.listen(8080);
