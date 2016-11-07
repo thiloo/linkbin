@@ -1,5 +1,6 @@
 var pg = require('pg');
-var dbUrl = 'postgres://spicedling:036363976@localhost:5432/users';
+var password = require('password.json');
+var dbUrl = 'postgres://spicedling:036363976@localhost:5432/linkbin';
 
 dbUrl = require('url').parse(dbUrl);
 

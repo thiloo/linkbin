@@ -5,7 +5,7 @@
         $scope.load = () => {
             $http.get('/homepage')
             .then(content => {
-                $scope.links = content.data;
+                $scope.links = content.data.file;
             });
         };
         $scope.load();
