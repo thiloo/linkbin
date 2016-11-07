@@ -28,5 +28,6 @@ CREATE TABLE users (
     id SERIAL primary key,
     username VARCHAR(255) not null UNIQUE,
     password VARCHAR(255) not null,
+    voted_links integer ARRAY,
     created_at TIMESTAMP default CURRENT_TIMESTAMP
 );
