@@ -18,7 +18,8 @@ CREATE TABLE comments (
     link_id INTEGER not null,
     comment VARCHAR(255) not null,
     username VARCHAR(255) not null,
-    parent_comment_id INTEGER default 0,
+    parent_id INTEGER default 0,
+    num_of_replies INTEGER default 0,
     created_at TIMESTAMP default CURRENT_TIMESTAMP
 );
 
