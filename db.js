@@ -47,7 +47,11 @@ exports.getLinkDetails = function(id) {
 };
 
 exports.getLinkComments = function(id) {
+<<<<<<< HEAD
     return getFromDb('SELECT * FROM comments WHERE [link_id=$1] and [parent_id = 0] ORDER BY created_at DESC LIMIT 30',[id]).then(function(result) {
+=======
+    return getFromDb('SELECT * FROM comments WHERE link_id=$1 ORDER BY created_at DESC LIMIT 30',[id]).then(function(result) {
+>>>>>>> ad2d3d789ed98cbd5029d10ee8e0e558f0150e9a
         return result;
     }).catch(function(err) {
         if(err) {
