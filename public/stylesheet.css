@@ -5,24 +5,36 @@
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
+    margin-top: 10px;
 }
 
 .fpLinkHeadline {
     font-size: 28px;
     color: blue;
     text-decoration: none;
+    width: 100%;
+    display: block;
 }
 
 .fpLinkTitle {
     font-size: 24px;
     color: grey;
     text-decoration: none;
+    width: 100%;
+    display: block;
 }
 
 .fpLinkDescription {
     font-size: 18px;
     color: grey;
     text-decoration: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fpTimeDescription {
+    font-size: 18px;
+    color: grey;
 }
 
 .fpUpVote {

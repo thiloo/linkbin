@@ -1,0 +1,17 @@
+<div ng-controller="frontPageListView">
+    <div ng-repeat="link in links" id="link-id" class="fpLinkContainer" >
+        <div class="fpVoteCountContainer">
+            <img class="fpUpVote" src="/media/upvote.png" />
+            <p class="fpVoteCount">{{link.votes}}</p>
+            <img class="fpDownVote" src="/media/downvote.png" />
+        </div>
+        <div class="fpLinkContentContainer">
+            <a href="#/{{link.link}}" class="fpLinkHeadline">{{link.headline_in_link}}</a>
+            <a href="#/{{link.id}}" class="fpLinkTitle" ng-if="link.given_title.length < 99">{{link.given_title}}</a>
+            <a href="#/{{link.id}}" class="fpLinkTitle" ng-if="link.given_title.length > 99">{{link.given_title | limitTo : 100}}...</a>
+            <a href="#/{{link.id}}" class="fpLinkDescription">{{link.num_of_comments}} comments</a> |
+            <a href="#/{{link.id}}" class="fpLinkDescription">{{link.username}}</a> |
+            <time class="fpTimeDescription" am-time-ago="link.created_at"></time>
+        </div>
+    </div>
+</div>
