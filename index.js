@@ -30,7 +30,7 @@ app.get('/homepage', function(req, res) {
 });
 
 app.get('/:id', function(req, res) {
-    var id = req.url;
+    var id = req.params.id;
     var linkDetails = db.getLinkDetails(id);
     var linkComments = db.getLinkComments(id);
     return Promise.all([linkDetails, linkComments]).then(function(results) {
@@ -46,7 +46,66 @@ app.get('/:id', function(req, res) {
             console.log(err);
         }
     });
-})
+});
+
+
+app.post('/insertNormalComment', function(req, res) {
+    var linkId = req.body.linkId;
+    var comment = req.body.comment;
+    var username = req.body.username;
+    db.insertComment(linkId, comment, username).then(function() {
+        res.json({
+            success:true
+        })
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+});
+
+
+app.post('/insertReplyComment', function(req, res) {
+    var linkId = req.body.linkId;
+    var comment = req.body.comment;
+    var username = req.body.username;
+    var parentId = req.body.parentId;
+    db.insertReply(linkId,comment,username,parentId).then(function(parentId) {
+        db.addReplyToParent(parentId);
+    }).then(function() {
+        res.json({
+            success:true
+        });
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+});
+
+app.get('/getReplies/:parentId', function (req,res) {
+    var parentId = req.params.parentId;
+    db.getReplies(id).then(function(result) {
+        console.log(result);
+        res.json({
+            success:true,
+            file:result.rows
+        });
+
+    });
+});
+
+app.get('/addVote/:id/:username', function(req, res) {
+    var id = req.params.id;
+    var username = req.params.username;
+    db.addVote(id).then(function() {
+        db.addVoteToUser(username, id);
+
+        res.json({
+            success:true
+        });
+    });
+});
 
 
 app.listen(8080);
