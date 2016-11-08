@@ -15,9 +15,10 @@ var db=require('./db');
 app.use(express.static('public'));
 
 
-app.get('/homepage', function(req, res) {
 
-    db.linksDetails().then(function(result) {
+
+app.get('/homepage', function(req, res) {
+    db.getLinksDetails().then(function(result) {
         res.json({
             success:true,
             file: result.rows
@@ -48,6 +49,25 @@ app.get('/:id', function(req, res) {
     });
 });
 
+
+app.post('insertLinkData', function(req,res) {
+    var link = req.body.link;
+    var headlineInLink = req.body.headlineInLink;
+    var givenTitle = req.body.givenTitle;
+    var username = req.body.username;
+    var source = req.body.source;
+    var picture = req.body.picture;
+    db.insertLinkDetails(link,headlineInLink,givenTitle,username,source,picture).then(function() {
+        res.json({
+            success:true,
+            file:result
+        });
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+});
 
 app.post('/insertNormalComment', function(req, res) {
     var linkId = req.body.linkId;
@@ -85,7 +105,7 @@ app.post('/insertReplyComment', function(req, res) {
 
 app.get('/getReplies/:parentId', function (req,res) {
     var parentId = req.params.parentId;
-    db.getReplies(id).then(function(result) {
+    db.getReplies(parentId).then(function(result) {
         console.log(result);
         res.json({
             success:true,
