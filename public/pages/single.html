@@ -16,8 +16,8 @@
     </div>
 
     <div class="postCommentContainer">
-        <textarea class="postCommentTextArea"></textarea>
-        <button class="postCommentButton">Add Comment</button>
+        <textarea class="postCommentTextArea" ng-model="comment"></textarea>
+        <button class="postCommentButton" ng-click="submitComment()">Add Comment </button>
     </div>
 
     <div ng-repeat="comment in comments" class="commentContainer" id="comment-{{comment.id}}">
