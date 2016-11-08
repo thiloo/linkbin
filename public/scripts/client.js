@@ -18,9 +18,20 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
         $http.get(`/${$routeParams.id}`).then(function(content) {
             $scope.link = content.data.file.link[0];
             $scope.comments = content.data.file.comments;
+            console.log($scope.comments);
         }).catch(function(error) {
             console.log(error);
         });
     };
     $scope.load();
+    $scope.getReplies = function($event) {
+        var parentId = $event.path[2].id.split('-')[1];
+        $http.get(`/getReplies/${parentId}`)
+        .then(function(content) {
+            console.log(content);
+        })
+        .catch(function(error){
+            console.log(error);
+        });
+    };
 });
