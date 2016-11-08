@@ -56,7 +56,7 @@ app.post('/insertNormalComment', function(req, res) {
     db.insertComment(linkId, comment, username).then(function() {
         res.json({
             success:true
-        })
+        });
     }).catch(function(err) {
         if(err) {
             console.log(err);
