@@ -30,7 +30,7 @@ app.get('/homepage', function(req, res) {
 });
 
 app.get('/:id', function(req, res) {
-    var id = req.url;
+    var id = req.params.id;
     var linkDetails = db.getLinkDetails(id);
     var linkComments = db.getLinkComments(id);
     return Promise.all([linkDetails, linkComments]).then(function(results) {
