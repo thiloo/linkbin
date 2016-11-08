@@ -34,4 +34,21 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
             console.log(error);
         });
     };
+    $scope.submitComment = function() {
+        var comment = $scope.comment;
+        var username = 'tempUsername';
+        var linkId = $routeParams.id;
+        var obj = {
+            'comment':comment,
+            'linkId':linkId,
+            'username':username
+        };
+        $http.post('/insertNormalComment',obj).then(function(content) {
+             $scope.comments.unshift(content.data.file);
+             $scope.comment = '';
+        });
+    };
+
+
+
 });
