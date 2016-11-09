@@ -78,8 +78,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
             console.log(error);
         });
     };
-<<<<<<< HEAD
-=======
+    
     $scope.submitComment = function() {
         var comment = $scope.comment;
         var username = 'tempUsername';
@@ -94,10 +93,4 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
              $scope.comment = '';
         });
     };
-
-
-
-
-
->>>>>>> master
 });
