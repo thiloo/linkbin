@@ -1,0 +1,22 @@
+<p>This is the partial for register view.</p>
+<!-- <body ng-app="linkbinApp"> -->
+
+    <div ng-controller="RegisterCtrl">
+        <h1>Register</h1>
+        <div>
+            <form ng-submit="register()">
+                <div ng-show="invalidLogin" class="alert alert-danger">Invalid username/password</div>
+                <input type="text"  placeholder="Username" ng-model="user.username" ng-required="true"/>
+                <input type="password"  placeholder="Password" ng-model="user.password" ng-required="true"/>
+                <button type="submit">{{buttonText}}</button>
+                <button ng-click="user.register()">Register</button>
+                <button ng-click="user.login()">Login</button>
+
+            </form>
+        </div>
+    </div>
+
+        <div ng-controller="exempleCtrl">
+           HELLO {{name}}!
+        </div>
+</body>

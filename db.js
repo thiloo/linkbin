@@ -25,6 +25,17 @@ pool.on('error', function(err) {
     }
 });
 
+exports.createUser = function(username, password){
+    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id').then(function(result){
+        return result;
+    }).catch(function(err){
+        if(err){
+            console.log(err);
+        }
+    });
+};
+
+
 
 exports.linksDetails = function() {
     return getFromDb('SELECT * FROM links ORDER BY created_at DESC LIMIT 60').then(function(result) {

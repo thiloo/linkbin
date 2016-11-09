@@ -5,10 +5,16 @@
         <title>Linkbin</title>
         <link rel="stylesheet" href="stylesheet.css" media="screen" title="no title">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
+        <script src="https://cdn.jsdelivr.net/satellizer/0.15.5/satellizer.min.js"></script>
         <script src="client.js"></script>
+        <script src="angular-route.js"></script>
+        <script type="text/javascript" src="./views/register.js"></script>
     </head>
     <body ng-app="linkbinApp">
-        <div ng-controller="frontPageList">
+
+        <!-- <div ng-controller="frontPageList">
             <div ng-repeat="link in links" id="link-id" class="fpLinkContainer">
                 <a href="{{link.link}}" class="fpLinkHeadline">{{link.headline_in_link}}</a><br />
                 <a href="#" class="fpLinkTitle">{{link.given_title}}</a><br />
@@ -16,6 +22,11 @@
                 <a href="#" class="fpLinkDescription">{{link.username}}</a> |
                 <a href="#" class="fpLinkDescription">{{link.created_at}}</a>
             </div>
-        </div>
+        </div> -->
+
+    <a href="#/register">register</a>
+
+<div ng-view></div>
+
     </body>
 </html>
