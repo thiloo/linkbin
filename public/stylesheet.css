@@ -120,7 +120,7 @@
     text-decoration: none;
     color: darkgreen;
     margin: 0;
-    display: inline-block; 
+    display: inline-block;
 }
 
 .commentText {
@@ -144,4 +144,9 @@
     width: auto;
     border: none;
     color: white;
+}
+
+.replies {
+    position: relative;
+    left: 60px;
 }

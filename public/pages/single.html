@@ -23,6 +23,15 @@
     <div ng-repeat="comment in comments" class="commentContainer" id="comment-{{comment.id}}">
         <p class="commentText">{{comment.comment}}</p>
         <a class="commentDescription">{{comment.username}}</a> | posted <time am-time-ago="comment.created_at"></time> | <p class="commentDescription">reply</p>
-        <div class="replyContainer"><button ng-click="getReplies($event)">{{comment.num_of_replies}}</button></div>
+        <div class="replyContainer">
+            <button ng-click="getReplies($event)">{{comment.num_of_replies}} replies</button>
+            <div class="replies">
+                <!-- <button ng-show="closeReplies">close replies</button> -->
+            <div ng-repeat='reply in comment.replies'>
+                <p class="commentText">{{reply.comment}}</p>
+                <a class="commentDescription">{{reply.username}}</a> | posted <time am-time-ago="reply.created_at"></time>
+            </div>
+        <!-- </div> -->
+        </div>
     </div>
 </div>
