@@ -3,6 +3,8 @@ var app = express();
 
 var url = require("url");
 
+// var fill = require('./fillDB')
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
     extended: false
@@ -15,9 +17,10 @@ var db=require('./db');
 app.use(express.static('public'));
 
 
-app.get('/homepage', function(req, res) {
 
-    db.linksDetails().then(function(result) {
+
+app.get('/homepage', function(req, res) {
+    db.getLinksDetails().then(function(result) {
         res.json({
             success:true,
             file: result.rows
@@ -49,13 +52,33 @@ app.get('/:id', function(req, res) {
 });
 
 
+app.post('insertLinkData', function(req,res) {
+    var link = req.body.link;
+    var headlineInLink = req.body.headlineInLink;
+    var givenTitle = req.body.givenTitle;
+    var username = req.body.username;
+    var source = req.body.source;
+    var picture = req.body.picture;
+    db.insertLinkDetails(link,headlineInLink,givenTitle,username,source,picture).then(function() {
+        res.json({
+            success:true,
+            file:result
+        });
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+});
+
 app.post('/insertNormalComment', function(req, res) {
     var linkId = req.body.linkId;
     var comment = req.body.comment;
     var username = req.body.username;
-    db.insertComment(linkId, comment, username).then(function() {
+    db.insertComment(linkId, comment, username).then(function(result) {
         res.json({
-            success:true
+            success:true,
+            file:result.rows[0]
         });
     }).catch(function(err) {
         if(err) {
@@ -85,7 +108,7 @@ app.post('/insertReplyComment', function(req, res) {
 
 app.get('/getReplies/:parentId', function (req,res) {
     var parentId = req.params.parentId;
-    db.getReplies(id).then(function(result) {
+    db.getReplies(parentId).then(function(result) {
         console.log(result);
         res.json({
             success:true,
@@ -99,13 +122,27 @@ app.get('/addVote/:id/:username', function(req, res) {
     var id = req.params.id;
     var username = req.params.username;
     db.addVote(id).then(function() {
-        db.addVoteToUser(username, id);
-
-        res.json({
-            success:true
+        db.addUserVotes(username, id).then(function(result) {
+            res.json({
+                success:true,
+                file: result
+            });
         });
+
+
     });
 });
 
+
+app.get('/userVoted/:username', function(req, res) {
+    var username = req.params.username;
+    db.getUserVotes(username).then(function(result) {
+        console.log(result);
+        res.json({
+            success: true,
+            file: result.rows
+        });
+    });
+});
 
 app.listen(8080);
