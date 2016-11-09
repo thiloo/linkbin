@@ -122,13 +122,27 @@ app.get('/addVote/:id/:username', function(req, res) {
     var id = req.params.id;
     var username = req.params.username;
     db.addVote(id).then(function() {
-        db.addVoteToUser(username, id);
-
-        res.json({
-            success:true
+        db.addUserVotes(username, id).then(function(result) {
+            res.json({
+                success:true,
+                file: result
+            });
         });
+
+
     });
 });
 
+
+app.get('/userVoted/:username', function(req, res) {
+    var username = req.params.username;
+    db.getUserVotes(username).then(function(result) {
+        console.log(result);
+        res.json({
+            success: true,
+            file: result.rows
+        });
+    });
+});
 
 app.listen(8080);

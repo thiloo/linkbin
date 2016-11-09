@@ -1,7 +1,7 @@
 <div ng-controller="frontPageListView">
-    <div ng-repeat="link in links" id="link-id" class="fpLinkContainer" >
+    <div ng-repeat="link in links" id="link-{{link.id}}" class="fpLinkContainer" >
         <div class="fpVoteCountContainer">
-            <img class="fpUpVote" src="/media/upvote.png" />
+            <img class="fpUpVote" src="/media/upvote.png" ng-click="addVote($event)"/>
             <p class="fpVoteCount">{{link.votes}}</p>
             <img class="fpDownVote" src="/media/downvote.png" />
         </div>

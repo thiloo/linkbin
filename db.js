@@ -111,7 +111,7 @@ exports.getReplies = function(parentId) {
     });
 };
 
-exports.addVotes = function(id) {
+exports.addVote = function(id) {
     return getFromDb('UPDATE links SET votes = votes + 1 WHERE id=$1 RETURNING id', [id]).then(function(result) {
         return result;
     }).catch(function(err) {
@@ -122,12 +122,29 @@ exports.addVotes = function(id) {
 };
 
 exports.addVoteToUser = function(username, id) {
-    return getFromDb('UPDATE users SET voted_links = voted_links.push(id) WHERE username=$1', [username]).then(function(result) {
+    return getFromDb('UPDATE users SET voted_links = voted_links.push(id) WHERE username=$1 RETURNING voted_links', [username]).then(function(result) {
         return result;
     }).catch(function(err) {
         if(err) {
             console.log(err);
         }
+    });
+};
+
+exports.getUserVotes = function(username) {
+    return getFromDb('SELECT voted_links FROM users WHERE username = $1', [username]).then(function(result) {
+        return result;
+    }).catch(function(error) {
+        console.log(error);
+    });
+};
+
+exports.addUserVotes = function(username, link_id) {
+    return getFromDb('UPDATE users SET voted_links = array_append(voted_links, $2) WHERE username = $1 RETURNING voted_links', [username, link_id]).then(function(result){
+        console.log(result);
+    })
+    .catch(function(error){
+        console.log(error);
     });
 };
 
