@@ -57,7 +57,7 @@ exports.insertLinkDetails = function(link,headlineInLink,givenTitle,username,sou
 };
 
 exports.getLinkComments = function(id) {
-    return getFromDb('SELECT * FROM comments WHERE link_id=$1 and parent_id=0 ORDER BY created_at DESC LIMIT 30',[id]).then(function(result) {
+    return getFromDb('SELECT * FROM comments WHERE link_id=$1 and parent_id=0 ORDER BY created_at DESC LIMIT 200',[id]).then(function(result) {
         console.log(result);
         return result;
     }).catch(function(err) {
@@ -102,7 +102,7 @@ exports.addReplyToParent = function(parentId) {
 };
 
 exports.getReplies = function(parentId) {
-    return getFromDb('SELECT * FROM comments WHERE parent_id=$1  ORDER BY created_at DESC LIMIT 40',[parentId]).then(function(result) {
+    return getFromDb('SELECT * FROM comments WHERE parent_id=$1  ORDER BY created_at DESC LIMIT 200',[parentId]).then(function(result) {
         return result;
     }).catch(function(err) {
         if(err) {
