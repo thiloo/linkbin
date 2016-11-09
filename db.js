@@ -68,7 +68,9 @@ exports.getLinkComments = function(id) {
 };
 
 exports.insertComment = function(linkId, comment, username) {
-    return getFromDb('INSERT into comments(link_id,comment,username) VALUES($1,$2,$3) RETURNING id', [linkId,comment,username]).then(function(result) {
+    return getFromDb('INSERT into comments(link_id,comment,username) VALUES($1,$2,$3) RETURNING id,comment,username,created_at,num_of_replies', [linkId,comment,username]).then(function(result) {
+        console.log('result in db');
+        console.log(result);
         return result;
     }).catch(function(err) {
         if(err) {

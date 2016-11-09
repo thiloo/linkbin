@@ -3,6 +3,8 @@ var app = express();
 
 var url = require("url");
 
+// var fill = require('./fillDB')
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
     extended: false
@@ -73,9 +75,10 @@ app.post('/insertNormalComment', function(req, res) {
     var linkId = req.body.linkId;
     var comment = req.body.comment;
     var username = req.body.username;
-    db.insertComment(linkId, comment, username).then(function() {
+    db.insertComment(linkId, comment, username).then(function(result) {
         res.json({
-            success:true
+            success:true,
+            file:result.rows[0]
         });
     }).catch(function(err) {
         if(err) {
