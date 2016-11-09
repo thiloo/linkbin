@@ -7,5 +7,9 @@ linkbinApp.config(function($routeProvider) {
         .when('/:id', {
             templateUrl: 'pages/single.html',
             controller: 'singleLinkView'
+        })
+        .when('/login/login', {
+            templateUrl: 'pages/login.html',
+            controller: 'RegisterCtrl'
         });
 });
