@@ -1,11 +1,23 @@
 const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment']);
 //angularMoment displays time passed dynamically, included via CDN in index.html
+var $http = angular.injector(["ng"]).get("$http");
+var username = 'harry';
+$http.get(`/userVoted/${username}`).then(function(result) {
+    localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+});
 
 linkbinApp.controller('frontPageListView', function($scope, $http) {
     $scope.load = function() {
-        console.log('loading');
         $http.get('/homepage').then(function(content) {
-            $scope.links = content.data.file;
+            var links = content.data.file;
+            var votes = getVotes()[0].voted_links;
+            // add to links information about wether the user has voted on the link already
+            links.forEach(function(link) {
+                link.voted = votes.some(function(vote) {
+                    return vote === link.id;
+                });
+            });
+            $scope.links = links;
         }).catch(function(error) {
             console.log(error);
         });
@@ -14,15 +26,10 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
     $scope.addVote = function($event) {
         var id = $event.path[2].id.split('-')[1];
         var username = 'harry';
-        $http.get(`/addVote/${id}/${username}`).then(function(result) {
-            console.log(result);
+        $http.post(`/addVote/${id}/${username}`).then(function(result) {
+            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
         });
     };
-});
-var $http = angular.injector(["ng"]).get("$http");
-var username = 'harry';
-$http.get(`/userVoted/${username}`).then(function(result) {
-    console.log(result.data.file[0].voted_links);
 });
 
 linkbinApp.controller('userVotes', function($scope, $http) {
@@ -44,32 +51,50 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
     // $scope.isVisible = false;
     $scope.load = function() {
         $http.get(`/${$routeParams.id}`).then(function(content) {
+            var link = content.data.file.link[0];
+            var votes = getVotes()[0].voted_links;
+            link.voted = votes.some(function(vote) {
+                return vote === link.id;
+            });
             $scope.link = content.data.file.link[0];
             $scope.comments = content.data.file.comments;
-            // console.log($scope.comments);
         }).catch(function(error) {
             console.log(error);
         });
     };
     $scope.load();
+    var bool = false;
+    var place;
     $scope.getReplies = function($event) {
-        var parentId = parseInt($event.path[2].id.split('-')[1]);
-        $http.get(`/getReplies/${parentId}`)
-        .then(function(content) {
-            console.log(typeof parentId);
-            console.log($scope.comments);
-            for (var i=0;i<$scope.comments.length;i++) {
-                if ($scope.comments[i].id === parentId) {
-                    $scope.comments[i].replies = content.data.file;
-                    console.log($scope.comments[i]);
-                    break;
+        if (bool === true) {
+            $scope.comments[place].replies = "";
+            bool = false;
+        } else {
+            var parentId = parseInt($event.path[2].id.split('-')[1]);
+            $http.get(`/getReplies/${parentId}`).then(function(content) {
+                for (var i = 0; i < $scope.comments.length; i++) {
+                    if ($scope.comments[i].id === parentId) {
+                        $scope.comments[i].replies = content.data.file;
+                        bool = true;
+                        place = i;
+                        console.log($scope.comments[i]);
+                        break;
+                    }
                 }
-            }
-            $scope.closeReplies = true;
-        })
-        .catch(function(error){
-            console.log(error);
-        });
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
+    };
+
+    $scope.reply = function($event) {
+        console.log($event);
+        var parentId = parseInt($event.path[1].id.split('-')[1]);
+        console.log(parentId);
+    };
+
+    $scope.submitReply = function($event) {
+        console.log($scope.replyText);
     };
     $scope.submitComment = function() {
         var comment = $scope.comment;

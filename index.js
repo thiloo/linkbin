@@ -118,14 +118,14 @@ app.get('/getReplies/:parentId', function (req,res) {
     });
 });
 
-app.get('/addVote/:id/:username', function(req, res) {
+app.post('/addVote/:id/:username', function(req, res) {
     var id = req.params.id;
     var username = req.params.username;
     db.addVote(id).then(function() {
         db.addUserVotes(username, id).then(function(result) {
             res.json({
                 success:true,
-                file: result
+                file: result.rows
             });
         });
 
@@ -137,7 +137,6 @@ app.get('/addVote/:id/:username', function(req, res) {
 app.get('/userVoted/:username', function(req, res) {
     var username = req.params.username;
     db.getUserVotes(username).then(function(result) {
-        console.log(result);
         res.json({
             success: true,
             file: result.rows
