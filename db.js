@@ -141,7 +141,7 @@ exports.getUserVotes = function(username) {
 
 exports.addUserVotes = function(username, link_id) {
     return getFromDb('UPDATE users SET voted_links = array_append(voted_links, $2) WHERE username = $1 RETURNING voted_links', [username, link_id]).then(function(result){
-        console.log(result);
+        return result;
     })
     .catch(function(error){
         console.log(error);
