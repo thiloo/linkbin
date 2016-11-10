@@ -7,19 +7,18 @@ function setLocalStorage() {
 
     // obtain the array of upvoted articles from the database
     $http.get(`/userVoted/${username}`).then(function(result){
-        votes = result.data.file[0].voted_links;
+        votes = JSON.stringify(result.data.file[0].voted_links);
 
         // store the array in local storage
         localStorage.setItem('userVotes', votes);
-        console.log(localStorage.getItem('userVotes'));
     });
 }
-
+setLocalStorage();
 
 
 // get the array from local storage
 function getVotes() {
-    return localStorage.getItem('userVots');
+    return JSON.parse(localStorage.getItem('userVotes'));
 }
 
 // update client view to indicate upvoted articles

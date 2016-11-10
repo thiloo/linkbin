@@ -1,9 +1,9 @@
 <div ng-controller="frontPageListView">
     <div ng-repeat="link in links" id="link-{{link.id}}" class="fpLinkContainer" >
         <div class="fpVoteCountContainer">
-            <img class="fpUpVote" src="/media/upvote.png" ng-click="addVote($event)"/>
+            <img class="fpUpVote" src="/media/star.png" ng-click="addVote($event)" ng-if="link.voted === false"/>
+            <img class="fpUpVote" src="/media/stared.png" ng-click="addVote($event)" ng-if="link.voted === true"/>
             <p class="fpVoteCount">{{link.votes}}</p>
-            <img class="fpDownVote" src="/media/downvote.png" />
         </div>
         <div class="fpLinkContentContainer">
             <a href="#/{{link.link}}" class="fpLinkHeadline">{{link.headline_in_link}}</a>
