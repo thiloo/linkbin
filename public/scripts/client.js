@@ -1,3 +1,4 @@
+
 const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment']);
 //angularMoment displays time passed dynamically, included via CDN in index.html
 var $http = angular.injector(["ng"]).get("$http");
@@ -5,6 +6,7 @@ var username = 'harry';
 $http.get(`/userVoted/${username}`).then(function(result) {
     localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
 });
+
 
 linkbinApp.controller('frontPageListView', function($scope, $http) {
     $scope.load = function() {
@@ -63,6 +65,8 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
         });
     };
     $scope.load();
+
+
     var bool = false;
     var place;
     $scope.getReplies = function($event) {
@@ -91,11 +95,12 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
         console.log($event);
         var parentId = parseInt($event.path[1].id.split('-')[1]);
         console.log(parentId);
-    };
+    }
 
     $scope.submitReply = function($event) {
         console.log($scope.replyText);
     };
+
     $scope.submitComment = function() {
         var comment = $scope.comment;
         var username = 'tempUsername';

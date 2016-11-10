@@ -150,3 +150,12 @@
     position: relative;
     left: 60px;
 }
+
+.reply {
+background:none;
+border:none;
+cursor:pointer;
+text-decoration: underline;
+font-size:18px;
+color:blue;
+}
