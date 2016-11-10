@@ -1,28 +1,36 @@
 const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment']);
 //angularMoment displays time passed dynamically, included via CDN in index.html
 
-linkbinApp.controller('frontPageListView', function($scope, $http) {
-    $scope.load = function() {
-        console.log('loading');
-        $http.get('/homepage').then(function(content) {
-            $scope.links = content.data.file;
-        }).catch(function(error) {
-            console.log(error);
-        });
-    };
-    $scope.load();
-    $scope.addVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
-        var username = 'harry';
-        $http.get(`/addVote/${id}/${username}`).then(function(result) {
-            console.log(result);
-        });
-    };
-});
 var $http = angular.injector(["ng"]).get("$http");
 var username = 'harry';
 $http.get(`/userVoted/${username}`).then(function(result) {
-    console.log(result.data.file[0].voted_links);
+   localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+});
+
+linkbinApp.controller('frontPageListView', function($scope, $http) {
+   $scope.load = function() {
+       $http.get('/homepage').then(function(content) {
+           var links = content.data.file;
+           var votes = getVotes()[0].voted_links;
+           // add to links information about wether the user has voted on the link already
+           links.forEach(function(link) {
+               link.voted = votes.some(function(vote) {
+                   return vote === link.id;
+               });
+           });
+           $scope.links = links;
+       }).catch(function(error) {
+           console.log(error);
+       });
+   };
+   $scope.load();
+   $scope.addVote = function($event) {
+       var id = $event.path[2].id.split('-')[1];
+       var username = 'harry';
+       $http.post(`/addVote/${id}/${username}`).then(function(result) {
+           localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+       });
+   };
 });
 
 linkbinApp.controller('userVotes', function($scope, $http) {
@@ -43,15 +51,20 @@ linkbinApp.controller('userVotes', function($scope, $http) {
 linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
     // $scope.isVisible = false;
     $scope.load = function() {
-        $http.get(`/${$routeParams.id}`).then(function(content) {
-            $scope.link = content.data.file.link[0];
-            $scope.comments = content.data.file.comments;
-            // console.log($scope.comments);
-        }).catch(function(error) {
-            console.log(error);
-        });
-    };
-    $scope.load();
+           $http.get(`/${$routeParams.id}`).then(function(content) {
+               var link = content.data.file.link[0];
+               var votes = getVotes()[0].voted_links;
+               link.voted = votes.some(function(vote) {
+                   return vote === link.id;
+               });
+               $scope.link = content.data.file.link[0];
+               $scope.comments = content.data.file.comments;
+           }).catch(function(error) {
+               console.log(error);
+           });
+       };
+       $scope.load();
+
 
     var bool=false;
     var place;
