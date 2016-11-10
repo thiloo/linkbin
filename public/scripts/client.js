@@ -120,13 +120,6 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
                     }
                 }
             }
-
-            // console.log(result);
-
-            // console.log(angular.element(document).find(".postReplyTextArea"));
-            // $scope.showReplyBox = false;
-            // $scope.comments.unshift(content.data.file);
-            // $scope.comment = '';
         });
     };
 
