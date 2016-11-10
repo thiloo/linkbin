@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
-
+var scrape = require('./modules/scraper');
 var url = require("url");
+require('events').EventEmitter.prototype._maxListeners = 100;
 
 // var fill = require('./fillDB')
 
@@ -52,22 +53,26 @@ app.get('/:id', function(req, res) {
 });
 
 
-app.post('insertLinkData', function(req,res) {
-    var link = req.body.link;
-    var headlineInLink = req.body.headlineInLink;
-    var givenTitle = req.body.givenTitle;
-    var username = req.body.username;
-    var source = req.body.source;
-    var picture = req.body.picture;
-    db.insertLinkDetails(link,headlineInLink,givenTitle,username,source,picture).then(function() {
-        res.json({
-            success:true,
-            file:result
+app.post('/insertLinkData', function(req,res) {
+    var link = req.body.link,
+        description = req.body.description,
+        username = req.body.username,
+        source = url.parse(link).hostname,
+        altImg = 'media/default.jpg';
+
+    scrape.scraper(link).then(function(scraped) {
+        console.log(scraped);
+        db.insertLinkDetails(link,scraped.title || link, description, username, source, scraped.imageUrl || altImg).then(function(result) {
+            console.log(result);
+            res.json({
+                success:true,
+                file:result
+            });
+        }).catch(function(err) {
+            if(err) {
+                console.log(err);
+            }
         });
-    }).catch(function(err) {
-        if(err) {
-            console.log(err);
-        }
     });
 });
 
@@ -128,8 +133,19 @@ app.post('/addVote/:id/:username', function(req, res) {
                 file: result.rows
             });
         });
+    });
+});
 
-
+app.post('/removeVote/:id/:username', function(req, res) {
+    var id = req.params.id;
+    var username = req.params.username;
+    db.removeVote(id).then(function() {
+        db.removeVoteFromUser(username, id).then(function(result) {
+            res.json({
+                success:true,
+                file: result.rows
+            });
+        });
     });
 });
 

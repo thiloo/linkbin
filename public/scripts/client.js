@@ -12,14 +12,20 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
     $scope.load = function() {
         $http.get('/homepage').then(function(content) {
             var links = content.data.file;
-            var votes = getVotes()[0].voted_links;
-            // add to links information about wether the user has voted on the link already
-            links.forEach(function(link) {
-                link.voted = votes.some(function(vote) {
-                    return vote === link.id;
+            var votes = getVotes();
+            if (votes !== 'undefined') {
+                votes = getVotes()[0].voted_links;
+                links.forEach(function(link) {
+                    link.voted = votes.some(function(vote) {
+                        return vote === link.id;
+                    });
                 });
-            });
+            }
+
+            // add to links information about wether the user has voted on the link already
+
             $scope.links = links;
+            console.log($scope.links);
         }).catch(function(error) {
             console.log(error);
         });
@@ -29,6 +35,15 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
         var id = $event.path[2].id.split('-')[1];
         var username = 'harry';
         $http.post(`/addVote/${id}/${username}`).then(function(result) {
+            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+
+        });
+    };
+    $scope.removeVote = function($event) {
+        console.log('clicked');
+        var id = $event.path[2].id.split('-')[1];
+        var username = 'harry';
+        $http.post(`/removeVote/${id}/${username}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
         });
     };
@@ -54,10 +69,13 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
     $scope.load = function() {
         $http.get(`/${$routeParams.id}`).then(function(content) {
             var link = content.data.file.link[0];
-            var votes = getVotes()[0].voted_links;
-            link.voted = votes.some(function(vote) {
-                return vote === link.id;
-            });
+            var votes = getVotes();
+            if (votes) {
+                votes = getVotes()[0].voted_links;
+                link.voted = votes.some(function(vote) {
+                    return vote === link.id;
+                });
+            }
             $scope.link = content.data.file.link[0];
             $scope.comments = content.data.file.comments;
         }).catch(function(error) {
@@ -65,6 +83,21 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
         });
     };
     $scope.load();
+    $scope.addVote = function($event) {
+        var id = $event.path[2].id.split('-')[1];
+        var username = 'harry';
+        $http.post(`/addVote/${id}/${username}`).then(function(result) {
+            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+
+        });
+    };
+    $scope.removeVote = function($event) {
+        var id = $event.path[2].id.split('-')[1];
+        var username = 'harry';
+        $http.post(`/removeVote/${id}/${username}`).then(function(result) {
+            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+        });
+    };
 
 
     var bool = false;
@@ -95,7 +128,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
         console.log($event);
         var parentId = parseInt($event.path[1].id.split('-')[1]);
         console.log(parentId);
-    }
+    };
 
     $scope.submitReply = function($event) {
         console.log($scope.replyText);
@@ -153,3 +186,23 @@ linkbinApp.controller('RegisterCtrl', function($scope, $window) {
         });
     };
 });
+
+linkbinApp.controller('addLink', function($scope, $http) {
+    var url = "https://www.theguardian.com/us-news/2016/nov/10/theresa-may-still-awaiting-call-from-donald-trump";
+    $scope.add = function($event) {
+        var config = {
+            method: 'POST',
+            data: {
+                link:  $scope.link.url,
+                description:  $scope.link.description,
+                username: 'harry'
+            },
+            url:'/insertLinkData'
+        };
+        console.log(config);
+        $http(config).success(function(response){
+            console.log(response);
+        });
+    }
+
+})
