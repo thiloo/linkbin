@@ -1,17 +1,19 @@
 <div ng-controller="frontPageListView">
     <div ng-repeat="link in links" id="link-{{link.id}}" class="fpLinkContainer" >
-        <div class="fpVoteCountContainer">
-            <img class="fpUpVote" src="/media/star.png" ng-click="addVote($event)" ng-if="link.voted === false"/>
-            <img class="fpUpVote" src="/media/stared.png" ng-click="addVote($event)" ng-if="link.voted === true"/>
+        <div class="fpVoteCountContainer" ng-switch on="link.voted">
+            <img class="fpUpVote" src="/media/stared.png" ng-click="removeVote($event); link.voted = false; link.votes = link.votes - 1" ng-switch-when="true"/>
+            <img class="fpUpVote" src="/media/star.png" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" ng-switch-when="false"/>
             <p class="fpVoteCount">{{link.votes}}</p>
         </div>
         <div class="fpLinkContentContainer">
-            <a href="#/{{link.link}}" class="fpLinkHeadline">{{link.headline_in_link}}</a>
+            <a href="#/{{link.link}}" class="fpLinkHeadline" ng-if="link.headline_in_link.length <= 80">{{link.headline_in_link}}</a>
+            <a href="#/{{link.link}}" class="fpLinkHeadline" ng-if="link.headline_in_link.length > 80">{{link.headline_in_link | limitTo: 80}}...</a>
             <a href="#/{{link.id}}" class="fpLinkTitle" ng-if="link.given_title.length < 99">{{link.given_title}}</a>
             <a href="#/{{link.id}}" class="fpLinkTitle" ng-if="link.given_title.length > 99">{{link.given_title | limitTo : 100}}...</a>
             <a href="#/{{link.id}}" class="fpLinkDescription">{{link.num_of_comments}} comments</a> |
             <a href="#/{{link.id}}" class="fpLinkDescription">{{link.username}}</a> |
             <time class="fpTimeDescription" am-time-ago="link.created_at"></time>
+            <!-- <img src="{{link.picture_url}}"  style="height: 50px; width 50px; float: right;"/> -->
         </div>
     </div>
 </div>

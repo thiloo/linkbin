@@ -1,10 +1,11 @@
 <div>
-    <div class="spLinkContainer">
-        <div class="spVoteCountContainer">
-            <img class="spUpVote" src="/media/star.png" ng-if="link.voted === false"/>
-            <img class="spUpVote" src="/media/stared.png" ng-if="link.voted === true"/>
+    <div class="spLinkContainer" id="link-{{link.id}}">
+        <div class="spVoteCountContainer" ng-switch on="link.voted">
+            <img class="spUpVote" src="/media/star.png" ng-switch-when="false" ng-click="addVote($event); link.voted= true; link.votes = link.votes + 1" />
+            <img class="spUpVote" src="/media/stared.png" ng-switch-when="true" ng-click="addVote($event); link.voted= false; link.votes = link.votes - 1" />
             <p class="spVoteCount">{{link.votes}}</p>
         </div>
+
         <div class="spLinkContentContainer">
             <a href="{{link.link}}"><h1 class="spTitle">{{link.headline_in_link}}</h1></a>
             <h3 class="spDescription" ng-if="link.given_title.length < 99">{{link.given_title}}</h3>
@@ -22,7 +23,8 @@
 
     <div ng-repeat="comment in comments" class="commentContainer" id="comment-{{comment.id}}">
         <p class="commentText">{{comment.comment}}</p>
-        <a class="commentDescription">{{comment.username}}</a> | posted <time am-time-ago="comment.created_at"></time> | <p class="commentDescription">
+        <a class="commentDescription">{{comment.username}}</a> | posted <time am-time-ago="comment.created_at"></time> |
+        <p class="commentDescription">
         </p>
 
         <button ng-click="showReplyBox = !showReplyBox; reply($event)" class="reply"=>reply</button>

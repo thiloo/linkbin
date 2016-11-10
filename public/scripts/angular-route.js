@@ -11,5 +11,9 @@ linkbinApp.config(function($routeProvider) {
         .when('/login/login', {
             templateUrl: 'pages/login.html',
             controller: 'RegisterCtrl'
+        })
+        .when('/add/link', {
+            templateUrl: 'pages/upload.html',
+            controller: 'addLink'
         });
 });
