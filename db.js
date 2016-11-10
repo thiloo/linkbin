@@ -4,7 +4,6 @@ var dbUrl = `postgres://${password.user}:${password.password}@localhost:5432/lin
 
 dbUrl = require('url').parse(dbUrl);
 
-
 var dbUser = dbUrl.auth.split(':');
 
 var dbConfig = {
@@ -25,8 +24,33 @@ pool.on('error', function(err) {
     }
 });
 
+var bcrypt = require('bcrypt');
+
+
+// // Hash the password with a Salt
+// function hashPassword(plainTextPassword, callback) {
+//     bcrypt.genSalt(function(err, salt) {
+//         if (err) {
+//             return callback(err);
+//         }
+//         console.log(salt, plainTextPassword);
+//         bcrypt.hash(plainTextPassword, salt, function(err, hash) {
+//             if (err) {
+//                 return callback(err);
+//             }
+//             console.log(hash);
+//             callback(null, hash);
+//             // Store hash in password DB.
+//         });
+//     });
+// }
+
+exports.hashPassword = function(plainTextPassword){
+    return bcrypt.hashSync(plainTextPassword, 10);
+};
+
 exports.createUser = function(username, password){
-    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id').then(function(result){
+    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id', [username, password]).then(function(result){
         return result;
     }).catch(function(err){
         if(err){
@@ -34,7 +58,6 @@ exports.createUser = function(username, password){
         }
     });
 };
-
 
 
 exports.linksDetails = function() {

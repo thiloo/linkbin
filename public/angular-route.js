@@ -4,3 +4,8 @@ linkbinApp.config(function($routeProvider) {
         controller: 'RegisterCtrl'
     });
 });
+
+
+// exports.register = function( req,res){
+//     res.render('login', { csrfToken: req.csrfToken() });
+// };

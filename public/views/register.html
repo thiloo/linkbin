@@ -1,5 +1,4 @@
 <p>This is the partial for register view.</p>
-    <!-- <body ng-app="app"> -->
 
     <div ng-controller="RegisterCtrl">
         <h1>Register</h1>
@@ -9,23 +8,8 @@
                 <input type="text"  placeholder="Username" ng-model="user.username" ng-required="true"/>
                 <input type="password"  placeholder="Password" ng-model="user.password" ng-required="true"/>
                 <button type="submit">{{buttonText}}</button>
-                <button ng-click="user.register()">Register</button>
+                <button ng-click="createUser()">Register</button>
                 <button ng-click="user.login()">Login</button>
             </form>
         </div>
     </div>
-
-
-<form ng-controller="SurveyController">
-  <div class="alert alert-info" role="alert">
-    {{notice}}
-  </div>
-  <div class="form-group">
-    <label>{{question.content}}</label>
-    <textarea class="form-control" ng-model="answer" required>
-    </textarea>
-  </div>
-  <button type="submit" class="btn btn-default btn-sm" ng-click="submit()">
-    Submit
-  </button>
-</form>
