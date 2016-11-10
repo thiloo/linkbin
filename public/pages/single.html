@@ -1,7 +1,7 @@
 <div>
     <div class="spLinkContainer" id="link-{{link.id}}">
         <div class="spVoteCountContainer" ng-switch on="link.voted">
-            <img class="spUpVote" src="/media/star.png" ng-switch-when="false" ng-click="addVote($event); link.voted= true; link.votes = link.votes + 1" />
+            <img class="spUpVote" src="/media/star.png" ng-switch-default ng-click="addVote($event); link.voted= true; link.votes = link.votes + 1" />
             <img class="spUpVote" src="/media/stared.png" ng-switch-when="true" ng-click="addVote($event); link.voted= false; link.votes = link.votes - 1" />
             <p class="spVoteCount">{{link.votes}}</p>
         </div>
