@@ -2,7 +2,7 @@
     <div ng-repeat="link in links" id="link-{{link.id}}" class="fpLinkContainer" >
         <div class="fpVoteCountContainer" ng-switch on="link.voted">
             <img class="fpUpVote" src="/media/stared.png" ng-click="removeVote($event); link.voted = false; link.votes = link.votes - 1" ng-switch-when="true"/>
-            <img class="fpUpVote" src="/media/star.png" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" ng-switch-when="false"/>
+            <img class="fpUpVote" src="/media/star.png" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" ng-switch-default/>
             <p class="fpVoteCount">{{link.votes}}</p>
         </div>
         <div class="fpLinkContentContainer">

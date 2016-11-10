@@ -13,7 +13,8 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
         $http.get('/homepage').then(function(content) {
             var links = content.data.file;
             var votes = getVotes();
-            if (votes !== 'undefined') {
+            console.log(votes);
+            if (votes != null) {
                 votes = getVotes()[0].voted_links;
                 links.forEach(function(link) {
                     link.voted = votes.some(function(vote) {
@@ -70,7 +71,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
         $http.get(`/${$routeParams.id}`).then(function(content) {
             var link = content.data.file.link[0];
             var votes = getVotes();
-            if (votes) {
+            if (votes !== null) {
                 votes = getVotes()[0].voted_links;
                 link.voted = votes.some(function(vote) {
                     return vote === link.id;
