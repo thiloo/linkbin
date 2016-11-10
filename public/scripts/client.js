@@ -52,25 +52,43 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
         });
     };
     $scope.load();
+
+    var bool=false;
+    var place;
     $scope.getReplies = function($event) {
-        var parentId = parseInt($event.path[2].id.split('-')[1]);
-        $http.get(`/getReplies/${parentId}`)
-        .then(function(content) {
-            console.log(typeof parentId);
-            console.log($scope.comments);
-            for (var i=0;i<$scope.comments.length;i++) {
-                if ($scope.comments[i].id === parentId) {
-                    $scope.comments[i].replies = content.data.file;
-                    console.log($scope.comments[i]);
-                    break;
+        if (bool===true) {
+            $scope.comments[place].replies="";
+            bool=false;
+        }
+        else {
+            var parentId = parseInt($event.path[2].id.split('-')[1]);
+            $http.get(`/getReplies/${parentId}`)
+            .then(function(content) {
+                for (var i=0;i<$scope.comments.length;i++) {
+                    if ($scope.comments[i].id === parentId) {
+                        $scope.comments[i].replies = content.data.file;
+                        bool=true;
+                        place=i;
+                        console.log($scope.comments[i]);
+                        break;
+                    }
                 }
-            }
-            $scope.closeReplies = true;
-        })
-        .catch(function(error){
-            console.log(error);
-        });
+            }).catch(function(error){
+                console.log(error);
+            });
+        }
     };
+
+    $scope.reply = function($event) {
+        console.log($event);
+        var parentId = parseInt($event.path[1].id.split('-')[1]);
+        console.log(parentId);
+    }
+
+    $scope.submitReply = function($event) {
+        console.log($scope.replyText);
+    };
+
     $scope.submitComment = function() {
         var comment = $scope.comment;
         var username = 'tempUsername';
