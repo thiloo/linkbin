@@ -98,11 +98,11 @@ app.post('/insertReplyComment', function(req, res) {
     var comment = req.body.comment;
     var username = req.body.username;
     var parentId = req.body.parentId;
-    db.insertReply(linkId,comment,username,parentId).then(function(parentId) {
+    db.insertReply(linkId,comment,username,parentId).then(function(result) {
         db.addReplyToParent(parentId);
-    }).then(function() {
         res.json({
-            success:true
+            success:true,
+            file:result.rows
         });
     }).catch(function(err) {
         if(err) {

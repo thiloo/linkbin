@@ -100,38 +100,59 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
     };
 
 
-    var bool = false;
-    var place;
     $scope.getReplies = function($event) {
-        if (bool === true) {
-            $scope.comments[place].replies = "";
-            bool = false;
-        } else {
-            var parentId = parseInt($event.path[2].id.split('-')[1]);
-            $http.get(`/getReplies/${parentId}`).then(function(content) {
-                for (var i = 0; i < $scope.comments.length; i++) {
-                    if ($scope.comments[i].id === parentId) {
-                        $scope.comments[i].replies = content.data.file;
-                        bool = true;
-                        place = i;
-                        console.log($scope.comments[i]);
-                        break;
-                    }
+        var parentId = parseInt($event.path[2].id.split('-')[1]);
+        for (var i = 0; i < $scope.comments.length; i++) {
+            if ($scope.comments[i].id === parentId) {
+                var place = i;
+                if($scope.comments[i].replies) {
+                    $scope.comments[i].replies = "";
+                    break;
                 }
-            }).catch(function(error) {
-                console.log(error);
-            });
+                else {
+                    $http.get(`/getReplies/${parentId}`).then(function(content) {
+                        $scope.comments[place].replies = content.data.file;
+                        console.log($scope.comments[i]);
+
+                    }).catch(function(error) {
+                        console.log(error);
+                    });
+                }
+            }
         }
     };
 
-    $scope.reply = function($event) {
-        console.log($event);
-        var parentId = parseInt($event.path[1].id.split('-')[1]);
-        console.log(parentId);
-    };
-
-    $scope.submitReply = function($event) {
-        console.log($scope.replyText);
+    $scope.submitReply = function($event,data) {
+        var text = $event.target.parentNode.querySelector('textarea');
+        var comment = text.value;
+        var username = 'tempUsername'
+        var parentId = parseInt($event.path[2].id.split('-')[1]);
+        var linkId = $routeParams.id;
+        var obj = {
+            'comment': comment,
+            'linkId': linkId,
+            'username': username,
+            'parentId':parentId
+        };
+        text.value = '';
+        $http.post('/insertReplyComment', obj).then(function(content) {
+            for (var i = 0; i < $scope.comments.length; i++) {
+                if ($scope.comments[i].id === parentId) {
+                    if($scope.comments[i].replies) {
+                        $scope.comments[i].replies.unshift(content.data.file[0]);
+                        $scope.comments[i].num_of_replies +=1;
+                        break;
+                    }
+                    else {
+                        console.log('no replies!')
+                        $scope.comments[i].replies=content.data.file[0];
+                        $scope.comments[i].num_of_replies +=1;
+                        console.log($scope.comments[i].replies=content.data.file)
+                        break;
+                    }
+                }
+            }
+        });
     };
 
     $scope.submitComment = function() {
