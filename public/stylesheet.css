@@ -10,7 +10,7 @@
 
 .fpLinkHeadline {
     font-size: 28px;
-    color: blue;
+    color: #4990E2;
     text-decoration: none;
     width: 100%;
     display: block;
@@ -72,7 +72,7 @@
 .spTitle {
     display: block;
     font-size: 36px;
-    color: blue;
+    color: #4990E2;
     margin: 10px 0;
 }
 
@@ -141,7 +141,7 @@
 }
 
 .postCommentButton {
-    background-color: blue;
+    background-color: #4990E2;
     height: 25px;
     width: auto;
     border: none;
@@ -154,12 +154,39 @@
 }
 
 .reply {
-background:none;
-border:none;
-cursor:pointer;
-text-decoration: underline;
-font-size:18px;
-color:blue;
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-decoration: underline;
+    font-size:18px;
+    color:#4990E2;
+}
+
+.headerContainer {
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.headerButton {
+    background-color: #4990E2;
+    color: white;
+    height: 34px;
+    width: auto;
+    float: right;
+    border: none;
+    margin: 0;
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.headerTitle {
+    display: inline-block;
+    font-size: 28px;
+    font-family: sans-serif;
+    margin: 0;
+    color: #4990E2;
 }
 
 .picture {
