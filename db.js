@@ -46,8 +46,8 @@ exports.getLinkDetails = function(id) {
     });
 };
 
-exports.insertLinkDetails = function(link,headlineInLink,givenTitle,username,source,picture) {
-    return getFromDb('INSERT into links(link, headline_in_link, given_title, username, source, picture_url) VALUES($1,$2,$3,$4,$5,$6) RETURNING id', [link,headlineInLink,givenTitle,username,source,picture]).then(function(result) {
+exports.insertLinkDetails = function(url,headlineInLink,givenTitle,username,source,picture) {
+    return getFromDb('INSERT into links(url, link_headline, description, username, source, picture_url) VALUES($1,$2,$3,$4,$5,$6) RETURNING id', [url,headlineInLink,givenTitle,username,source,picture]).then(function(result) {
         return result;
     }).catch(function(err) {
         if(err) {

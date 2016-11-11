@@ -215,7 +215,7 @@ linkbinApp.controller('addLink', function($scope, $http) {
         var config = {
             method: 'POST',
             data: {
-                link:  $scope.link.url,
+                url:  $scope.link.url,
                 description:  $scope.link.description,
                 username: 'harry'
             },
