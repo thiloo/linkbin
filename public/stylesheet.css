@@ -1,11 +1,12 @@
 .fpLinkContainer {
-    height: 90px;
+    height: 110px;
     width: 100%;
     padding-left: 20px;
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
     margin-top: 10px;
+    border-bottom: 2px dotted black;
 }
 
 .fpLinkHeadline {
@@ -167,7 +168,11 @@
     padding-left: 30px;
     padding-top: 15px;
     padding-bottom: 15px;
+    height: 70px;
+    /*border: 2px solid black;*/
+    background-color: #A9A9A9;
 }
+
 
 .headerButton {
     background-color: #4990E2;
@@ -178,7 +183,7 @@
     border: none;
     margin: 0;
     margin-right: 10px;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .headerTitle {
@@ -186,14 +191,15 @@
     font-size: 28px;
     font-family: sans-serif;
     margin: 0;
-    color: #4990E2;
+    color: #191970;
+    font-weight: 700;
 }
 
 .picture {
     position:relative;
     overflow: hidden;
-    width: 80px;
-    height:80px;
+    width: 90px;
+    height:90px;
     image-rendering: -moz-crisp-edges;
     image-rendering:   -o-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
@@ -204,6 +210,6 @@
 .fpLinkSource {
     position: relative;
     float:right;
-    left:24%;
+    left:20%;
     bottom:24%;
 }

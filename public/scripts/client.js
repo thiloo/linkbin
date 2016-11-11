@@ -50,6 +50,56 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
     };
 });
 
+
+linkbinApp.controller('userView', function($scope, $http, $location) {
+    $scope.load = function() {
+        var url = $location.path();
+        var username = url.split('/')[2];
+        $http.get(`/user/${username}`).then(function(content) {
+            var links = content.data.file;
+            console.log(links);
+            var votes = getVotes();
+            console.log(votes);
+            if (votes != null) {
+                votes = getVotes()[0].voted_links;
+                links.forEach(function(link) {
+                    link.voted = votes.some(function(vote) {
+                        return vote === link.id;
+                    });
+                });
+            }
+
+            // add to links information about wether the user has voted on the link already
+
+            $scope.links = links;
+            console.log($scope.links);
+        }).catch(function(error) {
+            console.log(error);
+        });
+    };
+    $scope.load();
+    $scope.addVote = function($event) {
+        var id = $event.path[2].id.split('-')[1];
+        var username = 'harry';
+        $http.post(`/addVote/${id}/${username}`).then(function(result) {
+            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+
+        });
+    };
+    $scope.removeVote = function($event) {
+        console.log('clicked');
+        var id = $event.path[2].id.split('-')[1];
+        var username = 'schon';
+        $http.post(`/removeVote/${id}/${username}`).then(function(result) {
+            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+        });
+    };
+});
+
+
+
+
+
 linkbinApp.controller('userVotes', function($scope, $http) {
     // add to votes array
 

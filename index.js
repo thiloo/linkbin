@@ -162,4 +162,24 @@ app.get('/userVoted/:username', function(req, res) {
     });
 });
 
+
+app.get('/user/:username', function(req, res) {
+    var username = req.params.username;
+    console.log(req.params);
+    console.log(username);
+    db.getUserLinks(username).then(function(result) {
+        res.json({
+            success:true,
+            file: result.rows
+        });
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+
+
+})
+
+
 app.listen(8080);
