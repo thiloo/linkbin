@@ -7,9 +7,9 @@
         </div>
 
         <div class="spLinkContentContainer">
-            <a href="{{link.link}}"><h1 class="spTitle">{{link.headline_in_link}}</h1></a>
-            <h3 class="spDescription" ng-if="link.given_title.length < 99">{{link.given_title}}</h3>
-            <h3 class="spDescription" ng-if="link.given_title.length > 99">{{link.given_title | limitTo : 100}}...</h3>
+            <a href="{{link.url}}"><h1 class="spTitle">{{link.link_headline}}</h1></a>
+            <h3 class="spDescription" ng-if="link.description.length < 99">{{link.description}}</h3>
+            <h3 class="spDescription" ng-if="link.description.length > 99">{{link.description | limitTo : 100}}...</h3>
             <p class="spText"> Submitted by</p>
             <a href="#/{{link.id}}" class="spText">{{link.username}}</a>
             <time class="spText" am-time-ago="link.created_at"></time>

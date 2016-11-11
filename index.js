@@ -54,15 +54,15 @@ app.get('/:id', function(req, res) {
 
 
 app.post('/insertLinkData', function(req,res) {
-    var link = req.body.link,
+    var linkUrl = req.body.url,
         description = req.body.description,
         username = req.body.username,
-        source = url.parse(link).hostname,
+        source = url.parse(linkUrl).hostname,
         altImg = 'media/default.jpg';
-
-    scrape.scraper(link).then(function(scraped) {
+    console.log(linkUrl);
+    scrape.scraper(linkUrl).then(function(scraped) {
         console.log(scraped);
-        db.insertLinkDetails(link,scraped.title || link, description, username, source, scraped.imageUrl || altImg).then(function(result) {
+        db.insertLinkDetails(linkUrl,scraped.title || linkUrl, description, username, source, scraped.imageUrl || altImg).then(function(result) {
             console.log(result);
             res.json({
                 success:true,
