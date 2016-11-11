@@ -57,7 +57,9 @@
 }
 
 .fpLinkContentContainer {
+    position: relative;
     display: inline-block;
+    left:2%;
 }
 
 .spLinkContainer {
@@ -158,4 +160,23 @@ cursor:pointer;
 text-decoration: underline;
 font-size:18px;
 color:blue;
+}
+
+.picture {
+    position:relative;
+    overflow: hidden;
+    width: 80px;
+    height:80px;
+    image-rendering: -moz-crisp-edges;
+    image-rendering:   -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
+.fpLinkSource {
+    position: relative;
+    float:right;
+    left:24%;
+    bottom:24%;
 }
