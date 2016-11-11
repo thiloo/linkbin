@@ -77,6 +77,16 @@ exports.insertComment = function(linkId, comment, username) {
     });
 };
 
+exports.addCommentToLink = function(linkId) {
+    return getFromDb('UPDATE links SET num_of_comments = num_of_comments + 1 WHERE id=$1 RETURNING id', [linkId]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+
+}
 
 exports.insertReply = function(linkId, comment, username, parentId) {
     return getFromDb('INSERT into comments(link_id,comment,username,parent_id) VALUES($1,$2,$3,$4) RETURNING parent_id,comment,username,created_at', [linkId,comment,username,parentId]).then(function(result) {

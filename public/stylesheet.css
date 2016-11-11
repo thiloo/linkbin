@@ -57,7 +57,9 @@
 }
 
 .fpLinkContentContainer {
+    position: relative;
     display: inline-block;
+    left:2%;
 }
 
 .spLinkContainer {
@@ -185,4 +187,23 @@
     font-family: sans-serif;
     margin: 0;
     color: #4990E2;
+}
+
+.picture {
+    position:relative;
+    overflow: hidden;
+    width: 80px;
+    height:80px;
+    image-rendering: -moz-crisp-edges;
+    image-rendering:   -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
+.fpLinkSource {
+    position: relative;
+    float:right;
+    left:24%;
+    bottom:24%;
 }
