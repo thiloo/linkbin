@@ -7,6 +7,19 @@ $http.get(`/userVoted/${username}`).then(function(result) {
     localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
 });
 
+linkbinApp.controller('header', function($scope, $uibModal){
+    $scope.login = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'pages/login.html'
+        });
+    };
+    $scope.addLink = function() {
+        var uibModalInstance = $uibModal.open({
+            templateUrl: 'pages/upload.html',
+            controller: 'addLink'
+        });
+    };
+});
 
 linkbinApp.controller('frontPageListView', function($scope, $http) {
     $scope.load = function() {
@@ -50,25 +63,10 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
     };
 });
 
-linkbinApp.controller('userVotes', function($scope, $http) {
-    // add to votes array
-
-    // obtain the array of upvoted articles from the database
-
-    // store the array in local storage
-
-    // get the array from local storage
-
-    // update client view to indicate upvoted articles
-
-    // update localstorage upon changes in user vote
-
-});
-
 linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
     // $scope.isVisible = false;
     $scope.load = function() {
-        $http.get(`/${$routeParams.id}`).then(function(content) {
+        $http.get(`/link/${$routeParams.id}`).then(function(content) {
             var link = content.data.file.link[0];
             var votes = getVotes();
             if (votes !== null) {
@@ -173,43 +171,36 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
 
 });
 
-linkbinApp.controller('RegisterCtrl', function($scope, $window) {
-    $scope.user = {
-        username: 'john.doe',
-        password: 'foobar'
-    };
+linkbinApp.controller('register', function($scope, $http) {
+    $scope.user = {username: '', password: ''};
     $scope.message = '';
+    $scope.buttonText="register";
 
-    $scope.buttonText = "register";
-    $scope.register = function() {
-        console.log($scope);
-        $scope.buttonText = " Registering in. . . ";
-        console.log($scope.buttonText);
+    $scope.register = function(){
+        $scope.buttonText=" Registering in. . . ";
+        console.log($scope.user);
 
-        $http.post('/authenticate', $scope.user).success(function(data, status, headers, config) {
-            $window.sessionStorage.token = data.token;
-            $scope.message = 'Welcome';
-        }).error(function(data, status, headers, config) {
-            // Erase the token if the user fails to log in
-            delete $window.sessionStorage.token;
-
-            // Handle login errors here
-            $scope.message = 'Error: Invalid user or password';
-
-            // authService.register($scope.credentials.username, $scope.credentials.password).then(function(data){
-            //     // $state.go('user.postViewAll');
-            //     console.log(data);
-            //     $state.go('home');
-            // },function(err){
-            //     $scope.invalidRegister=true;
-            // }).finally(function(){
-            //     $scope.buttonText="Register";
-            // });
+        var config = {
+            method: 'POST',
+            data: {
+                user_name:  $scope.user.username,
+                password:  $scope.user.password
+            },
+            url:'/user/register'
+        };
+        $http(config).success(function(response){
+            console.log(response);
         });
+
+
+        //TODO ajax route on login to see the token 1)csrf-token 2)
+
     };
 });
 
-linkbinApp.controller('addLink', function($scope, $http) {
+
+linkbinApp.controller('addLink', function($scope, $http, $uibModalInstance) {
+    console.log($uibModalInstance);
     $scope.add = function() {
         var config = {
             method: 'POST',
@@ -224,14 +215,6 @@ linkbinApp.controller('addLink', function($scope, $http) {
         $http(config).success(function(response){
             console.log(response);
         });
-    };
-});
-
-linkbinApp.controller('header', function($scope, $uibModal){
-    $scope.login = function() {
-        console.log('opening popUp');
-        var modalInstance = $uibModal.open({
-            templateUrl: 'login.html'
-        });
+        $uibModalInstance.close('close');
     };
 });

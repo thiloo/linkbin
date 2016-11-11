@@ -1,15 +1,15 @@
-<p>This is the partial for register view.</p>
-
-    <div ng-controller="RegisterCtrl">
-        <h1>Register</h1>
+<div class="registerPopUp">
+    <div ng-controller="register">
+        <h2>Login / Signup</h2>
         <div>
             <form class="form-signin" ng-submit="register()">
                 <div ng-show="invalidLogin" class="alert alert-danger">Invalid username/password</div>
                 <input type="text"  placeholder="Username" ng-model="user.username" ng-required="true"/>
                 <input type="password"  placeholder="Password" ng-model="user.password" ng-required="true"/>
                 <button type="submit">{{buttonText}}</button>
-                <button ng-click="user.register()">Register</button>
+                <button ng-click="createUser()">Register</button>
                 <button ng-click="user.login()">Login</button>
             </form>
         </div>
     </div>
+</div>

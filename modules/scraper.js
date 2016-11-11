@@ -4,6 +4,7 @@ var fs = require('fs'),
 
 module.exports.scraper = function(url) {
     return new Promise(function(resolve, reject){
+        request = request.defaults({jar: true});
         request(url, function(error, response, html) {
             if(!error) {
                 var $ = cheerio.load(html);

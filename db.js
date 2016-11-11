@@ -1,6 +1,7 @@
 var pg = require('pg');
 var password = require('./password.json');
 var dbUrl = `postgres://${password.user}:${password.password}@localhost:5432/linkbin`;
+var bcrypt = require('bcrypt');
 
 dbUrl = require('url').parse(dbUrl);
 
@@ -186,6 +187,21 @@ exports.addToNumOfComments = function(id) {
         }
     });
 };
+
+exports.hashPassword = function(plainTextPassword){
+    return bcrypt.hashSync(plainTextPassword, 10);
+};
+
+exports.createUser = function(username, password){
+    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id', [username, password]).then(function(result){
+        return result;
+    }).catch(function(err){
+        if(err){
+            console.log(err);
+        }
+    });
+};
+
 
 function getFromDb(str, params) {
     return new Promise(function(resolve, reject) {

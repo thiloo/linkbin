@@ -2,6 +2,13 @@ var express = require('express');
 var app = express();
 var scrape = require('./modules/scraper');
 var url = require("url");
+var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
+var bcrypt = require('bcrypt');
+var csrf = require('csurf');
+var csrfProtection = csrf();
+
+
 require('events').EventEmitter.prototype._maxListeners = 100;
 
 // var fill = require('./fillDB')
@@ -17,6 +24,12 @@ var db=require('./db');
 
 app.use(express.static('public'));
 
+app.use(cookieParser());
+
+app.use(cookieSession({
+    secret: 'secret',
+    maxAge: 1000 * 60 * 60 * 24 * 14
+}));
 
 
 
@@ -33,7 +46,7 @@ app.get('/homepage', function(req, res) {
     });
 });
 
-app.get('/:id', function(req, res) {
+app.get('/link/:id', function(req, res) {
     var id = req.params.id;
     var linkDetails = db.getLinkDetails(id);
     var linkComments = db.getLinkComments(id);
@@ -151,10 +164,26 @@ app.post('/removeVote/:id/:username', function(req, res) {
     });
 });
 
-
 app.get('/userVoted/:username', function(req, res) {
     var username = req.params.username;
     db.getUserVotes(username).then(function(result) {
+        res.json({
+            success: true,
+            file: result.rows
+        });
+    });
+});
+
+app.post('/user/register', function(req, res){
+    var user = req.body;
+    console.log(user);
+
+    var hash = db.hashPassword(user.password);
+
+    console.log("this is the password hashed");
+
+    db.createUser(user.user_name, hash, csrfProtection).then(function(result){
+        console.log(result);
         res.json({
             success: true,
             file: result.rows

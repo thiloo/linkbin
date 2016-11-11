@@ -1,3 +1,8 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
 .fpLinkContainer {
     height: 90px;
     width: 100%;
@@ -172,7 +177,7 @@
 .headerButton {
     background-color: #4990E2;
     color: white;
-    height: 34px;
+    height: 40px;
     width: auto;
     float: right;
     border: none;
@@ -206,4 +211,24 @@
     float:right;
     left:24%;
     bottom:24%;
+}
+
+.registerPopUp {
+    height: 300px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uploadContainer {
+    height: 200px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addLinkInput {
+    length: 300px;
 }

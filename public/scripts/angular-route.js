@@ -4,13 +4,13 @@ linkbinApp.config(function($routeProvider) {
             templateUrl: 'pages/home.html',
             controller: 'frontPageListView'
         })
-        .when('/:id', {
+        .when('/link/:id', {
             templateUrl: 'pages/single.html',
             controller: 'singleLinkView'
         })
         .when('/login/login', {
             templateUrl: 'pages/login.html',
-            controller: 'RegisterCtrl'
+            controller: 'register'
         })
         .when('/add/link', {
             templateUrl: 'pages/upload.html',
