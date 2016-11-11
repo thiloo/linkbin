@@ -1,5 +1,5 @@
 
-const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment']);
+const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment', 'ui.bootstrap']);
 //angularMoment displays time passed dynamically, included via CDN in index.html
 var $http = angular.injector(["ng"]).get("$http");
 var username = 'harry';
@@ -210,8 +210,7 @@ linkbinApp.controller('RegisterCtrl', function($scope, $window) {
 });
 
 linkbinApp.controller('addLink', function($scope, $http) {
-    var url = "https://www.theguardian.com/us-news/2016/nov/10/theresa-may-still-awaiting-call-from-donald-trump";
-    $scope.add = function($event) {
+    $scope.add = function() {
         var config = {
             method: 'POST',
             data: {
@@ -225,6 +224,14 @@ linkbinApp.controller('addLink', function($scope, $http) {
         $http(config).success(function(response){
             console.log(response);
         });
-    }
+    };
+});
 
-})
+linkbinApp.controller('header', function($scope, $uibModal){
+    $scope.login = function() {
+        console.log('opening popUp');
+        var modalInstance = $uibModal.open({
+            templateUrl: 'login.html'
+        });
+    };
+});
