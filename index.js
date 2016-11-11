@@ -81,6 +81,7 @@ app.post('/insertNormalComment', function(req, res) {
     var comment = req.body.comment;
     var username = req.body.username;
     db.insertComment(linkId, comment, username).then(function(result) {
+        db.addCommentToLink(linkId);
         res.json({
             success:true,
             file:result.rows[0]
@@ -100,6 +101,7 @@ app.post('/insertReplyComment', function(req, res) {
     var parentId = req.body.parentId;
     db.insertReply(linkId,comment,username,parentId).then(function(result) {
         db.addReplyToParent(parentId);
+        db.addCommentToLink(linkId);
         res.json({
             success:true,
             file:result.rows
