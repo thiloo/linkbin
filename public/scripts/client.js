@@ -7,10 +7,11 @@ $http.get(`/userVoted/${username}`).then(function(result) {
     localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
 });
 
-linkbinApp.controller('header', function($scope, $uibModal){
+linkbinApp.controller('header',[ '$scope', '$uibModal', function($scope, $uibModal){
     $scope.login = function() {
         var modalInstance = $uibModal.open({
-            templateUrl: 'pages/login.html'
+            templateUrl: 'pages/login.html',
+            controller: 'register'
         });
     };
     $scope.addLink = function() {
@@ -19,7 +20,7 @@ linkbinApp.controller('header', function($scope, $uibModal){
             controller: 'addLink'
         });
     };
-});
+}]);
 
 linkbinApp.controller('frontPageListView', function($scope, $http) {
     $scope.load = function() {
@@ -199,8 +200,7 @@ linkbinApp.controller('register', function($scope, $http) {
 });
 
 
-linkbinApp.controller('addLink', function($scope, $http, $uibModalInstance) {
-    console.log($uibModalInstance);
+linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance', function($scope, $http, $uibModalInstance) {
     $scope.add = function() {
         var config = {
             method: 'POST',
@@ -211,10 +211,10 @@ linkbinApp.controller('addLink', function($scope, $http, $uibModalInstance) {
             },
             url:'/insertLinkData'
         };
-        console.log(config);
+        console.log('should be sumbitted: ',config);
         $http(config).success(function(response){
             console.log(response);
         });
         $uibModalInstance.close('close');
     };
-});
+}]);
