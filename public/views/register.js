@@ -1,10 +1,11 @@
 
-linkbinApp.controller('RegisterCtrl', function($scope, $http) {
+linkbinApp.controller('RegisterCtrl', function($scope, $http, $cookies) {
     $scope.user = {username: '', password: ''};
     $scope.message = '';
     // $scope.buttonText="register";
-
     $scope.register = function(){
+        $cookies.put('myFavorite', 'oatmeal');
+
         console.log($scope.user);
         var config = {
             method: 'POST',
@@ -33,6 +34,8 @@ linkbinApp.controller('RegisterCtrl', function($scope, $http) {
         };
         $http(config).success(function(response){
             console.log('login works');
+            var value = $cookies.get("key");
+            console.log(value);
         });
     };
 

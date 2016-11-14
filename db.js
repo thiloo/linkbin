@@ -27,29 +27,29 @@ pool.on('error', function(err) {
 var bcrypt = require('bcrypt');
 
 
-exports.checkPassword = function(textEnteredInLoginForm, hashedPasswordFromDatabase, callback) {
-    bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
-        if (err) {
-            return callback(err);
-        }
-        console.log(doesMatch);
-        callback(null, doesMatch);
-    });
-};
-
-// exports.checkPassword = function(requestedPassword, listedPassword) {
-//     return new Promise(function(resolve, reject) {
-//         bcrypt.compare(requestedPassword, listedPassword, function(err, doesMatch) {
-//             if (err) {
-//                 reject(err);
-//             }
-//             else {
-//                 console.log(doesMatch);
-//                 resolve(doesMatch);
-//             }
-//         });
+// exports.checkPassword = function(textEnteredInLoginForm, hashedPasswordFromDatabase, callback) {
+//     bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
+//         if (err) {
+//             return callback(err);
+//         }
+//         console.log(doesMatch);
+//         callback(null, doesMatch);
 //     });
 // };
+
+exports.checkPassword = function(requestedPassword, listedPassword) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.compare(requestedPassword, listedPassword, function(err, doesMatch) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                console.log(doesMatch);
+                resolve(doesMatch);
+            }
+        });
+    });
+};
 
 
 exports.getUser = function(username){

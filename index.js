@@ -103,18 +103,10 @@ app.post('/api/login', function(req, res){
     var login = req.body;
     console.log(login.password);
 
-
     db.getUser(login.user_name).then(function(result){
         console.log(result);
-        db.checkPassword(login.password, result.password, function(err, answer){
-            if (err){
-                console.log(err);
-                // res.render('register');
-            }
-            else{
-                console.log(answer);
-                // res.redirect('/thanks');
-            }
+        db.checkPassword(login.password, result.password).then(function(answer){
+            console.log(answer);
         });
         res.json({
             sucesss:true,
