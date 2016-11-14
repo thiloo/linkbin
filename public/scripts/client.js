@@ -2,7 +2,7 @@
 const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment', 'ui.bootstrap']);
 //angularMoment displays time passed dynamically, included via CDN in index.html
 var $http = angular.injector(["ng"]).get("$http");
-var username = 'harry';
+// var username = 'harry';
 $http.get(`/userVoted`).then(function(result) {
     localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
 });
@@ -26,16 +26,16 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
     $scope.load = function() {
         $http.get('/homepage').then(function(content) {
             var links = content.data.file;
-            var votes = getVotes();
-            console.log(votes);
-            if (votes != null) {
-                votes = getVotes()[0].voted_links;
-                links.forEach(function(link) {
-                    link.voted = votes.some(function(vote) {
-                        return vote === link.id;
-                    });
-                });
-            }
+            // var votes = getVotes();
+            // console.log(votes);
+            // if (votes != null || votes.length != 1) {
+            //     votes = getVotes()[0].voted_links;
+            //     links.forEach(function(link) {
+            //         link.voted = votes.some(function(vote) {
+            //             return vote === link.id;
+            //         });
+            //     });
+            // }
 
             // add to links information about wether the user has voted on the link already
 
@@ -236,6 +236,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
 linkbinApp.controller('register', function($scope, $http) {
     $scope.user = {username: '', password: ''};
     $scope.message = '';
+
     $scope.login = function(){
         console.log($scope.user);
         var config = {

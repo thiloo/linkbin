@@ -193,32 +193,17 @@ app.post('/removeVote/:id', function(req, res) {
 });
 
 app.get('/userVoted', function(req, res) {
-    var username = req.session.username;
-    db.getUserVotes(username).then(function(result) {
-        res.json({
-            success: true,
-            file: result.rows
+    if(req.session.username) {
+        var username = req.session.username;
+        db.getUserVotes(username).then(function(result) {
+            res.json({
+                success: true,
+                file: result.rows
+            });
         });
-    });
+    }
 });
 
-app.post('/user/register', function(req, res){
-    var user = req.body;
-
-    var hash = db.hashPassword(user.password);
-
-    console.log("this is the password hashed");
-
-    db.createUser(user.user_name, hash, csrfProtection).then(function(result){
-        console.log(result);
-        req.session.username = result.rows[0].username;
-        console.log(req.session.username);
-        res.json({
-            success: true,
-            file: result.rows
-        });
-    });
-});
 
 app.get('/user/:username', function(req, res) {
     var username = req.params.username;
@@ -234,31 +219,50 @@ app.get('/user/:username', function(req, res) {
             console.log(err);
         }
     });
+});
 
+app.post('/user/register', function(req, res){
+    var user = req.body;
 
-})
+    var hash = db.hashPassword(user.password);
+    db.createUser(user.user_name, hash, csrfProtection).then(function(result){
+        console.log(result);
+        req.session.username = result.rows[0].username;
+        console.log(req.session.username);
+        res.json({
+            success: true,
+            file: result.rows
+        });
+    });
+});
+
 
 app.post('/api/login', function(req, res){
     var login = req.body;
-    console.log(login.password);
+    console.log('login');
+    console.log(login);
 
 
     db.getUser(login.user_name).then(function(result){
-        console.log(result);
-        db.checkPassword(login.password, result.password, function(err, answer){
-            if (err){
-                console.log(err);
-                // res.render('register');
-            }
-            else{
-                console.log(answer);
-                // res.redirect('/thanks');
-            }
-        });
-        res.json({
-            sucesss:true,
-            file: result.rows
-        });
+        if(result.rows[0].length===0) {
+            console.log('no such user');
+        }
+        else {
+            console.log(login.password);
+            console.log(result);
+            db.checkPassword(login.password, result.rows[0].password).then(function(doesMatch){
+                if(doesMatch) {
+                    req.session.username = login.user_name;
+                    res.json({
+                        sucesss:true,
+                        file: result.rows
+                    });
+                }
+                else {
+                    console.log('wrong password, try again')
+                }
+            });
+        }
     });
 
 });
