@@ -154,7 +154,6 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams) {
             }
         });
     };
-
     $scope.submitComment = function() {
         var comment = $scope.comment;
         var username = 'tempUsername';

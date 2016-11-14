@@ -87,7 +87,7 @@ exports.addCommentToLink = function(linkId) {
         }
     });
 
-}
+};
 
 exports.insertReply = function(linkId, comment, username, parentId) {
     return getFromDb('INSERT into comments(link_id,comment,username,parent_id) VALUES($1,$2,$3,$4) RETURNING parent_id,comment,username,created_at', [linkId,comment,username,parentId]).then(function(result) {
