@@ -265,11 +265,11 @@ app.post('/api/login', function(req, res){
 });
 
 app.get('/checkLog', function(req,res) {
-    console.log('checklog');
-    if(req.session.user) {
+    console.log(req.session.username);
+    if(req.session.username) {
         res.json({
             success:true
-        })
+        });
     }
     else {
         res.json({

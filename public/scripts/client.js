@@ -6,9 +6,12 @@ var $http = angular.injector(["ng"]).get("$http");
 
 linkbinApp.run(function($rootScope,$http) {
     $http.get('/checkLog').then(function(result) {
-        console.log(result);
+        console.log(result.data);
         if (result.data.success===true) {
             $rootScope.log = true;
+            $http.get('/userVoted').then(function(result){
+                $rootScope.userVots = result.data.file[0].voted_links;
+            });
             console.log($rootScope.log)
         }
         else {
@@ -50,19 +53,19 @@ linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
     $scope.load = function() {
         $http.get('/homepage').then(function(content) {
             var links = content.data.file;
-            // var votes = getVotes();
-            // console.log(votes);
-            // if (votes != null || votes.length != 1) {
-            //     votes = getVotes()[0].voted_links;
-            //     links.forEach(function(link) {
-            //         link.voted = votes.some(function(vote) {
-            //             return vote === link.id;
-            //         });
-            //     });
-            // }
-            // add to links information about wether the user has voted on the link already
-
+            var votes;
+            if($rootScope.log === true) {
+                $http.get('/userVoted').then(function(result){
+                    votes = result.data.file[0].voted_links;
+                    links.forEach(function(link) {
+                        link.voted = votes.some(function(vote) {
+                            return vote === link.id;
+                        });
+                    });
+                });
+            }
             $scope.links = links;
+            $rootScope.userVotes = votes;
         }).catch(function(error) {
             console.log(error);
         });
@@ -87,19 +90,15 @@ linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
 });
 
 
-linkbinApp.controller('userView', function($scope, $http, $location) {
+linkbinApp.controller('userView', function($scope, $http, $location, $rootScope) {
     $scope.load = function() {
         var url = $location.path();
         var username = url.split('/')[2];
         $http.get(`/user/${username}`).then(function(content) {
             var links = content.data.file;
-            console.log(links);
-            var votes = getVotes();
-            console.log(votes);
-            if (votes != null) {
-                votes = getVotes()[0].voted_links;
+            if ($rootScope.log === true) {
                 links.forEach(function(link) {
-                    link.voted = votes.some(function(vote) {
+                    link.voted = $rootScope.userVotes.some(function(vote) {
                         return vote === link.id;
                     });
                 });
@@ -255,7 +254,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
 
 });
 
-linkbinApp.controller('register', function($scope, $http) {
+linkbinApp.controller('register', function($scope, $http, $rootScope) {
     $scope.user = {username: '', password: ''};
     $scope.message = '';
 
@@ -270,7 +269,9 @@ linkbinApp.controller('register', function($scope, $http) {
             url:'/api/login'
         };
         $http(config).success(function(response){
-            console.log('login works');
+            console.log('login works',response);
+            $rootScope.log = true;
+            $rootScope.userVotes = response.file[0].voted_links;
         });
     };
 

@@ -15,7 +15,7 @@ function setLocalStorage() {
         console.log(err);
     })
 }
-setLocalStorage();
+// setLocalStorage();
 
 
 // get the array from local storage
