@@ -1,6 +1,7 @@
 var pg = require('pg');
 var password = require('./password.json');
 var dbUrl = `postgres://${password.user}:${password.password}@localhost:5432/linkbin`;
+var bcrypt = require('bcrypt');
 
 dbUrl = require('url').parse(dbUrl);
 
@@ -46,8 +47,8 @@ exports.getLinkDetails = function(id) {
     });
 };
 
-exports.insertLinkDetails = function(link,headlineInLink,givenTitle,username,source,picture) {
-    return getFromDb('INSERT into links(link, headline_in_link, given_title, username, source, picture) VALUES($1,$2,$3,$4,$5,$6) RETURNING id', [link,headlineInLink,givenTitle,username,source,picture]).then(function(result) {
+exports.insertLinkDetails = function(url,headlineInLink,givenTitle,username,source,picture) {
+    return getFromDb('INSERT into links(url, link_headline, description, username, source, picture_url) VALUES($1,$2,$3,$4,$5,$6) RETURNING id', [url,headlineInLink,givenTitle,username,source,picture]).then(function(result) {
         return result;
     }).catch(function(err) {
         if(err) {
@@ -69,8 +70,6 @@ exports.getLinkComments = function(id) {
 
 exports.insertComment = function(linkId, comment, username) {
     return getFromDb('INSERT into comments(link_id,comment,username) VALUES($1,$2,$3) RETURNING id,comment,username,created_at,num_of_replies', [linkId,comment,username]).then(function(result) {
-        console.log('result in db');
-        console.log(result);
         return result;
     }).catch(function(err) {
         if(err) {
@@ -79,9 +78,20 @@ exports.insertComment = function(linkId, comment, username) {
     });
 };
 
+exports.addCommentToLink = function(linkId) {
+    return getFromDb('UPDATE links SET num_of_comments = num_of_comments + 1 WHERE id=$1 RETURNING id', [linkId]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+
+};
 
 exports.insertReply = function(linkId, comment, username, parentId) {
-    return getFromDb('INSERT into comments(link_id,comment,username,parent_id) VALUES($1,$2,$3,$4) RETURNING parent_id', [linkId,comment,username,parentId]).then(function(result) {
+    return getFromDb('INSERT into comments(link_id,comment,username,parent_id) VALUES($1,$2,$3,$4) RETURNING parent_id,comment,username,created_at', [linkId,comment,username,parentId]).then(function(result) {
+        console.log(result);
         return result;
     }).catch(function(err) {
         if(err) {
@@ -122,7 +132,27 @@ exports.addVote = function(id) {
 };
 
 exports.addVoteToUser = function(username, id) {
-    return getFromDb('UPDATE users SET voted_links = voted_links.push(id) WHERE username=$1 RETURNING voted_links', [username]).then(function(result) {
+    return getFromDb('UPDATE users SET voted_links = voted_links.push(id) WHERE username=$1 RETURNING voted_links', [username, id]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+exports.removeVote = function(id) {
+    return getFromDb('UPDATE links SET votes = votes - 1 WHERE id=$1 RETURNING id', [id]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+exports.removeVoteFromUser = function(username, id) {
+    return getFromDb('UPDATE users SET voted_links = array_remove(voted_links, $2) WHERE username=$1 RETURNING voted_links', [username, id]).then(function(result) {
         return result;
     }).catch(function(err) {
         if(err) {
@@ -141,12 +171,37 @@ exports.getUserVotes = function(username) {
 
 exports.addUserVotes = function(username, link_id) {
     return getFromDb('UPDATE users SET voted_links = array_append(voted_links, $2) WHERE username = $1 RETURNING voted_links', [username, link_id]).then(function(result){
-        console.log(result);
+        return result;
     })
     .catch(function(error){
         console.log(error);
     });
 };
+
+exports.addToNumOfComments = function(id) {
+    return getFromDb('UPDATE links SET num_of_comments = num_of_comments + 1 WHERE id = $1', [id]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+exports.hashPassword = function(plainTextPassword){
+    return bcrypt.hashSync(plainTextPassword, 10);
+};
+
+exports.createUser = function(username, password){
+    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id', [username, password]).then(function(result){
+        return result;
+    }).catch(function(err){
+        if(err){
+            console.log(err);
+        }
+    });
+};
+
 
 function getFromDb(str, params) {
     return new Promise(function(resolve, reject) {

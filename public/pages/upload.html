@@ -1,9 +1,9 @@
-
-<div ng-controller="uploadLink">
-    <form ng-submit="submit()">
-        <input type="text" ng-model="url" name="url" />
-        <input type="text" ng-model="givenTitle" name="givenTitle"/>
-        <input type="submit" id="submit" value="Upload"/>
-    </form>
-
+<div class="uploadContainer">
+    <div>
+        <form class="form-group" ng-submit="add()" novalidate>
+            <input type="text" ng-model="link.url" name="url" placeholder="URL" class="form-control addLinkInput" required />
+            <input type="text" ng-model="link.description" name="description" placeholder="Description" class="form-control addLinkInput" required />
+            <input type="submit" value="Submit"  class="btn" />
+        </form>
+    </div>
 </div>
