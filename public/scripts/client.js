@@ -6,14 +6,11 @@ var $http = angular.injector(["ng"]).get("$http");
 
 linkbinApp.run(function($rootScope,$http) {
     $http.get('/checkLog').then(function(result) {
-        console.log(result);
         if (result.data.success===true) {
             $rootScope.log = true;
-            console.log($rootScope.log)
         }
         else {
             $rootScope.log = false;
-            console.log($rootScope.log)
         }
     });
 })
@@ -23,7 +20,7 @@ $http.get(`/userVoted`).then(function(result) {
 });
 
 
-linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', function($scope, $uibModal,$http){
+linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', function($scope, $uibModal,$http,$window){
     $scope.login = function() {
         var modalInstance = $uibModal.open({
             templateUrl: 'pages/login.html',
@@ -40,7 +37,7 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', function($scope
     $scope.logout = function() {
         console.log('logging out');
         $http.get('/logout').then(function(result) {
-            alert ('you are logged out');
+            $window.location.reload();
         })
     };
 
@@ -49,6 +46,7 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', function($scope
 linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
     $scope.load = function() {
         $http.get('/homepage').then(function(content) {
+            console.log($rootScope.log);
             var links = content.data.file;
             // var votes = getVotes();
             // console.log(votes);
@@ -255,7 +253,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
 
 });
 
-linkbinApp.controller('register', function($scope, $http) {
+linkbinApp.controller('register', function($scope, $http,$window) {
     $scope.user = {username: '', password: ''};
     $scope.message = '';
 
@@ -270,6 +268,7 @@ linkbinApp.controller('register', function($scope, $http) {
             url:'/api/login'
         };
         $http(config).success(function(response){
+            $window.location.reload();
             console.log('login works');
         });
     };
@@ -287,6 +286,7 @@ linkbinApp.controller('register', function($scope, $http) {
             url:'/user/register'
         };
         $http(config).success(function(response){
+            $window.location.reload();
             console.log(response);
         });
 

@@ -266,7 +266,7 @@ app.post('/api/login', function(req, res){
 
 app.get('/checkLog', function(req,res) {
     console.log('checklog');
-    if(req.session.user) {
+    if(req.session.username) {
         res.json({
             success:true
         })
