@@ -26,7 +26,6 @@ pool.on('error', function(err) {
     }
 });
 
-
 exports.getLinksDetails = function() {
     return getFromDb('SELECT * FROM links ORDER BY created_at DESC LIMIT 60').then(function(result) {
         return result;
