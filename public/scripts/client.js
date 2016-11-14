@@ -8,6 +8,9 @@ linkbinApp.run(function($rootScope,$http) {
     $http.get('/checkLog').then(function(result) {
         if (result.data.success===true) {
             $rootScope.log = true;
+            $http.get('/userVoted').then(function(result){
+                $rootScope.userVots = result.data.file[0].voted_links;
+            });
         }
         else {
             $rootScope.log = false;
@@ -48,19 +51,19 @@ linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
         $http.get('/homepage').then(function(content) {
             console.log($rootScope.log);
             var links = content.data.file;
-            // var votes = getVotes();
-            // console.log(votes);
-            // if (votes != null || votes.length != 1) {
-            //     votes = getVotes()[0].voted_links;
-            //     links.forEach(function(link) {
-            //         link.voted = votes.some(function(vote) {
-            //             return vote === link.id;
-            //         });
-            //     });
-            // }
-            // add to links information about wether the user has voted on the link already
-
+            var votes;
+            if($rootScope.log === true) {
+                $http.get('/userVoted').then(function(result){
+                    votes = result.data.file[0].voted_links;
+                    links.forEach(function(link) {
+                        link.voted = votes.some(function(vote) {
+                            return vote === link.id;
+                        });
+                    });
+                });
+            }
             $scope.links = links;
+            $rootScope.userVotes = votes;
         }).catch(function(error) {
             console.log(error);
         });
@@ -85,19 +88,15 @@ linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
 });
 
 
-linkbinApp.controller('userView', function($scope, $http, $location) {
+linkbinApp.controller('userView', function($scope, $http, $location, $rootScope) {
     $scope.load = function() {
         var url = $location.path();
         var username = url.split('/')[2];
         $http.get(`/user/${username}`).then(function(content) {
             var links = content.data.file;
-            console.log(links);
-            var votes = getVotes();
-            console.log(votes);
-            if (votes != null) {
-                votes = getVotes()[0].voted_links;
+            if ($rootScope.log === true) {
                 links.forEach(function(link) {
-                    link.voted = votes.some(function(vote) {
+                    link.voted = $rootScope.userVotes.some(function(vote) {
                         return vote === link.id;
                     });
                 });
@@ -253,7 +252,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
 
 });
 
-linkbinApp.controller('register', function($scope, $http,$window) {
+linkbinApp.controller('register', function($scope, $http, $rootScope, $window) {
     $scope.user = {username: '', password: ''};
     $scope.message = '';
 
@@ -268,8 +267,9 @@ linkbinApp.controller('register', function($scope, $http,$window) {
             url:'/api/login'
         };
         $http(config).success(function(response){
+            $rootScope.log = true;
+            $rootScope.userVotes = response.file[0].voted_links;
             $window.location.reload();
-            console.log('login works');
         });
     };
 
