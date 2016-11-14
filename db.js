@@ -192,8 +192,29 @@ exports.hashPassword = function(plainTextPassword){
     return bcrypt.hashSync(plainTextPassword, 10);
 };
 
+exports.checkPassword = function(textEnteredInLoginForm, hashedPasswordFromDatabase, callback) {
+    bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
+        if (err) {
+            return callback(err);
+        }
+        console.log(doesMatch);
+        callback(null, doesMatch);
+    });
+};
+
+exports.getUser = function(username){
+    return getFromDb('SELECT * FROM users WHERE username=$1',[username]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+
 exports.createUser = function(username, password){
-    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id', [username, password]).then(function(result){
+    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING username', [username, password]).then(function(result){
         return result;
     }).catch(function(err){
         if(err){

@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
 var bcrypt = require('bcrypt');
 var csrf = require('csurf');
-var csrfProtection = csrf();
+var csrfProtection = csrf({cookie: true});
 
 
 require('events').EventEmitter.prototype._maxListeners = 100;
@@ -67,63 +67,90 @@ app.get('/link/:id', function(req, res) {
 
 
 app.post('/insertLinkData', function(req,res) {
-    var linkUrl = req.body.url,
+    if(!req.session.username) {
+        console.log('no');
+        res.json({
+            success:false
+        })
+    }
+
+    else {
+        var linkUrl = req.body.url,
         description = req.body.description,
-        username = req.body.username,
+        username = req.session.username,
         source = url.parse(linkUrl).hostname,
         altImg = 'media/default.jpg';
-    console.log(linkUrl);
-    scrape.scraper(linkUrl).then(function(scraped) {
-        console.log(scraped);
-        db.insertLinkDetails(linkUrl,scraped.title || linkUrl, description, username, source, scraped.imageUrl || altImg).then(function(result) {
-            console.log(result);
+        console.log(linkUrl);
+        scrape.scraper(linkUrl).then(function(scraped) {
+            console.log(scraped);
+            db.insertLinkDetails(linkUrl,scraped.title || linkUrl, description, username, source, scraped.imageUrl || altImg).then(function(result) {
+                console.log(result);
+                res.json({
+                    success:true,
+                    file:result
+                });
+            }).catch(function(err) {
+                if(err) {
+                    console.log(err);
+                }
+            });
+        });
+    }
+
+});
+
+app.post('/insertNormalComment', function(req, res) {
+    console.log(req.session.username);
+    if(!req.session.username) {
+        res.json({
+            success:false
+        })
+    }
+    else {
+        var linkId = req.body.linkId;
+        var comment = req.body.comment;
+        var username = req.session.username;
+        db.insertComment(linkId, comment, username).then(function(result) {
+            db.addCommentToLink(linkId);
             res.json({
                 success:true,
-                file:result
+                file:result.rows[0]
             });
         }).catch(function(err) {
             if(err) {
                 console.log(err);
             }
         });
-    });
-});
 
-app.post('/insertNormalComment', function(req, res) {
-    var linkId = req.body.linkId;
-    var comment = req.body.comment;
-    var username = req.body.username;
-    db.insertComment(linkId, comment, username).then(function(result) {
-        db.addCommentToLink(linkId);
-        res.json({
-            success:true,
-            file:result.rows[0]
-        });
-    }).catch(function(err) {
-        if(err) {
-            console.log(err);
-        }
-    });
+    }
 });
 
 
 app.post('/insertReplyComment', function(req, res) {
-    var linkId = req.body.linkId;
-    var comment = req.body.comment;
-    var username = req.body.username;
-    var parentId = req.body.parentId;
-    db.insertReply(linkId,comment,username,parentId).then(function(result) {
-        db.addReplyToParent(parentId);
-        db.addCommentToLink(linkId);
+    if(!req.session.username) {
         res.json({
-            success:true,
-            file:result.rows
+            success:false
+        })
+    }
+    else {
+
+        var linkId = req.body.linkId;
+        var comment = req.body.comment;
+        var username = req.session.username;
+        var parentId = req.body.parentId;
+        db.insertReply(linkId,comment,username,parentId).then(function(result) {
+            db.addReplyToParent(parentId);
+            db.addCommentToLink(linkId);
+            res.json({
+                success:true,
+                file:result.rows
+            });
+        }).catch(function(err) {
+            if(err) {
+                console.log(err);
+            }
         });
-    }).catch(function(err) {
-        if(err) {
-            console.log(err);
-        }
-    });
+    }
 });
 
 app.get('/getReplies/:parentId', function (req,res) {
@@ -136,11 +163,12 @@ app.get('/getReplies/:parentId', function (req,res) {
         });
 
     });
+
 });
 
-app.post('/addVote/:id/:username', function(req, res) {
+app.post('/addVote/:id', function(req, res) {
     var id = req.params.id;
-    var username = req.params.username;
+    var username = req.session.username;
     db.addVote(id).then(function() {
         db.addUserVotes(username, id).then(function(result) {
             res.json({
@@ -151,9 +179,9 @@ app.post('/addVote/:id/:username', function(req, res) {
     });
 });
 
-app.post('/removeVote/:id/:username', function(req, res) {
+app.post('/removeVote/:id', function(req, res) {
     var id = req.params.id;
-    var username = req.params.username;
+    var username = req.session.username;
     db.removeVote(id).then(function() {
         db.removeVoteFromUser(username, id).then(function(result) {
             res.json({
@@ -164,8 +192,8 @@ app.post('/removeVote/:id/:username', function(req, res) {
     });
 });
 
-app.get('/userVoted/:username', function(req, res) {
-    var username = req.params.username;
+app.get('/userVoted', function(req, res) {
+    var username = req.session.username;
     db.getUserVotes(username).then(function(result) {
         res.json({
             success: true,
@@ -176,7 +204,6 @@ app.get('/userVoted/:username', function(req, res) {
 
 app.post('/user/register', function(req, res){
     var user = req.body;
-    console.log(user);
 
     var hash = db.hashPassword(user.password);
 
@@ -184,6 +211,8 @@ app.post('/user/register', function(req, res){
 
     db.createUser(user.user_name, hash, csrfProtection).then(function(result){
         console.log(result);
+        req.session.username = result.rows[0].username;
+        console.log(req.session.username);
         res.json({
             success: true,
             file: result.rows
@@ -208,6 +237,31 @@ app.get('/user/:username', function(req, res) {
 
 
 })
+
+app.post('/api/login', function(req, res){
+    var login = req.body;
+    console.log(login.password);
+
+
+    db.getUser(login.user_name).then(function(result){
+        console.log(result);
+        db.checkPassword(login.password, result.password, function(err, answer){
+            if (err){
+                console.log(err);
+                // res.render('register');
+            }
+            else{
+                console.log(answer);
+                // res.redirect('/thanks');
+            }
+        });
+        res.json({
+            sucesss:true,
+            file: result.rows
+        });
+    });
+
+});
 
 
 app.listen(8080);
