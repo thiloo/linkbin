@@ -15,5 +15,9 @@ linkbinApp.config(function($routeProvider) {
         .when('/add/link', {
             templateUrl: 'pages/upload.html',
             controller: 'addLink'
-        });
+        })
+        .when('/user/:username', {
+            templateUrl: 'pages/user.html',
+            controller: 'userView'
+        })
 });
