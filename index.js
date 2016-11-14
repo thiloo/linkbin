@@ -264,6 +264,20 @@ app.post('/api/login', function(req, res){
     });
 });
 
+app.get('/checkLog', function(req,res) {
+    console.log('checklog');
+    if(req.session.user) {
+        res.json({
+            success:true
+        })
+    }
+    else {
+        res.json({
+            success:false
+        })
+    }
+})
+
 app.get('/logout', function(req,res) {
         req.session = null;
         res.json({
