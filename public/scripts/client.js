@@ -28,7 +28,7 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
             var links = content.data.file;
             var votes = getVotes();
             console.log(votes);
-            if (votes != null) {
+            if (votes != null && votes != 'undefined') {
                 votes = getVotes()[0].voted_links;
                 links.forEach(function(link) {
                     link.voted = votes.some(function(vote) {
@@ -36,11 +36,9 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
                     });
                 });
             }
-
             // add to links information about wether the user has voted on the link already
 
             $scope.links = links;
-            console.log($scope.links);
         }).catch(function(error) {
             console.log(error);
         });
@@ -245,7 +243,7 @@ linkbinApp.controller('register', function($scope, $http) {
 });
 
 
-linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance', function($scope, $http, $uibModalInstance) {
+linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance', '$location', function($scope, $http, $uibModalInstance, $location) {
     $scope.add = function() {
         var config = {
             method: 'POST',
@@ -256,9 +254,9 @@ linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance', functio
             },
             url:'/insertLinkData'
         };
-        console.log('should be sumbitted: ',config);
         $http(config).success(function(response){
             console.log(response);
+            $location.path(`/link/${response.file.rows[0].id}`);
         });
         $uibModalInstance.close('close');
     };

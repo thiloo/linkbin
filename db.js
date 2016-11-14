@@ -59,7 +59,6 @@ exports.insertLinkDetails = function(url,headlineInLink,givenTitle,username,sour
 
 exports.getLinkComments = function(id) {
     return getFromDb('SELECT * FROM comments WHERE link_id=$1 and parent_id=0 ORDER BY created_at DESC LIMIT 200',[id]).then(function(result) {
-        console.log(result);
         return result;
     }).catch(function(err) {
         if(err) {
@@ -91,7 +90,6 @@ exports.addCommentToLink = function(linkId) {
 
 exports.insertReply = function(linkId, comment, username, parentId) {
     return getFromDb('INSERT into comments(link_id,comment,username,parent_id) VALUES($1,$2,$3,$4) RETURNING parent_id,comment,username,created_at', [linkId,comment,username,parentId]).then(function(result) {
-        console.log(result);
         return result;
     }).catch(function(err) {
         if(err) {

@@ -68,15 +68,12 @@ app.get('/link/:id', function(req, res) {
 
 app.post('/insertLinkData', function(req,res) {
     var linkUrl = req.body.url,
-        description = req.body.description,
+        description = req.body.description || '',
         username = req.body.username,
         source = url.parse(linkUrl).hostname,
         altImg = 'media/default.jpg';
-    console.log(linkUrl);
     scrape.scraper(linkUrl).then(function(scraped) {
-        console.log(scraped);
         db.insertLinkDetails(linkUrl,scraped.title || linkUrl, description, username, source, scraped.imageUrl || altImg).then(function(result) {
-            console.log(result);
             res.json({
                 success:true,
                 file:result
@@ -129,7 +126,6 @@ app.post('/insertReplyComment', function(req, res) {
 app.get('/getReplies/:parentId', function (req,res) {
     var parentId = req.params.parentId;
     db.getReplies(parentId).then(function(result) {
-        console.log(result);
         res.json({
             success:true,
             file:result.rows
@@ -176,8 +172,6 @@ app.get('/userVoted/:username', function(req, res) {
 
 app.post('/user/register', function(req, res){
     var user = req.body;
-    console.log(user);
-
     var hash = db.hashPassword(user.password);
 
     console.log("this is the password hashed");
@@ -205,9 +199,7 @@ app.get('/user/:username', function(req, res) {
             console.log(err);
         }
     });
-
-
-})
+});
 
 
 app.listen(8080);
