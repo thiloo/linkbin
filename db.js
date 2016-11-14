@@ -1,5 +1,7 @@
 var pg = require('pg');
-var password = require('./password.json');
+if(!process.env.DATABASE_URL) {
+    var password = require('./password.json');
+}
 var dbUrl = process.env.DATABASE_URL || `postgres://${password.user}:${password.password}@localhost:5432/linkbin`;
 var bcrypt = require('bcrypt');
 
