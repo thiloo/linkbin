@@ -4,7 +4,6 @@ var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
 var bcrypt = require('bcrypt');
 
-
 ///////////////////////////////////////////////////
 app.use(cookieParser());
 
@@ -100,33 +99,31 @@ app.post('/api/user', function(req, res){
     });
 });
 
-// app.post('/authenticate', function(req,res){
-//
-//     if (!(req.body.username === 'john.doe' && req.body.password === 'foobar')){
-//         res.send(401, 'Wrong user or passwword');
-//         return;
-//     }
-//
-//     var profile = {
-//         first_name:'John',
-//         last_name:'Doe',
-//         email:'john@doe.com',
-//         id:123
-//     };
-//
-//     var token = jwt.sign(profile, secret, {expiresInMinutes: 60*5});
-//
-//     res.json= ({token: token});
-//
-// }
-// );
+app.post('/api/login', function(req, res){
+    var login = req.body;
+    console.log(login.password);
 
-// app.get('/api/restricted', function (req, res) {
-//     console.log('user ' + req.user.email + ' is calling /api/restricted');
-//     res.json({
-//         name: 'foo'
-//     });
-// });
+
+    db.getUser(login.user_name).then(function(result){
+        console.log(result);
+        db.checkPassword(login.password, result.password, function(err, answer){
+            if (err){
+                console.log(err);
+                // res.render('register');
+            }
+            else{
+                console.log(answer);
+                // res.redirect('/thanks');
+            }
+        });
+        res.json({
+            sucesss:true,
+            file: result.rows
+        });
+    });
+
+});
+
 
 app.listen(8080);
 console.log('Running on port 8080...');

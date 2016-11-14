@@ -27,23 +27,41 @@ pool.on('error', function(err) {
 var bcrypt = require('bcrypt');
 
 
-// // Hash the password with a Salt
-// function hashPassword(plainTextPassword, callback) {
-//     bcrypt.genSalt(function(err, salt) {
-//         if (err) {
-//             return callback(err);
-//         }
-//         console.log(salt, plainTextPassword);
-//         bcrypt.hash(plainTextPassword, salt, function(err, hash) {
+exports.checkPassword = function(textEnteredInLoginForm, hashedPasswordFromDatabase, callback) {
+    bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
+        if (err) {
+            return callback(err);
+        }
+        console.log(doesMatch);
+        callback(null, doesMatch);
+    });
+};
+
+// exports.checkPassword = function(requestedPassword, listedPassword) {
+//     return new Promise(function(resolve, reject) {
+//         bcrypt.compare(requestedPassword, listedPassword, function(err, doesMatch) {
 //             if (err) {
-//                 return callback(err);
+//                 reject(err);
 //             }
-//             console.log(hash);
-//             callback(null, hash);
-//             // Store hash in password DB.
+//             else {
+//                 console.log(doesMatch);
+//                 resolve(doesMatch);
+//             }
 //         });
 //     });
-// }
+// };
+
+
+exports.getUser = function(username){
+    return getFromDb('SELECT * FROM users WHERE username=$1',[username]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
 
 exports.hashPassword = function(plainTextPassword){
     return bcrypt.hashSync(plainTextPassword, 10);
@@ -89,8 +107,6 @@ exports.getLinkComments = function(id) {
         }
     });
 };
-
-
 
 function getFromDb(str, params) {
     return new Promise(function(resolve, reject) {
