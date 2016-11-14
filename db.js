@@ -1,8 +1,8 @@
 var pg = require('pg');
-var password = require('./password.json');
+if(!process.env.DATABASE_URL) {
+    var password = require('./password.json');
+}
 var dbUrl = process.env.DATABASE_URL || `postgres://${password.user}:${password.password}@localhost:5432/linkbin`;
-
-
 var bcrypt = require('bcrypt');
 
 dbUrl = require('url').parse(dbUrl);
@@ -27,7 +27,6 @@ pool.on('error', function(err) {
         console.log(err);
     }
 });
-
 
 exports.getLinksDetails = function() {
     return getFromDb('SELECT * FROM links ORDER BY created_at DESC LIMIT 60').then(function(result) {
