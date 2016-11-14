@@ -190,7 +190,8 @@ app.post('/api/login', function(req, res) {
     db.getUser(login.user_name).then(function(result) {
         if (result.rows[0].length === 0) {
             console.log('no such user');
-        } else {
+            }
+            else {
             console.log(login.password);
             console.log(result);
             db.checkPassword(login.password, result.rows[0].password).then(function(doesMatch) {

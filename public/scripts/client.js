@@ -94,18 +94,19 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
         var username = url.split('/')[2];
         $http.get(`/user/${username}`).then(function(content) {
             var links = content.data.file;
-            if ($rootScope.log === true) {
-                links.forEach(function(link) {
-                    link.voted = $rootScope.userVotes.some(function(vote) {
-                        return vote === link.id;
+            var votes;
+            if($rootScope.log === true) {
+                $http.get('/userVoted').then(function(result){
+                    votes = result.data.file[0].voted_links;
+                    links.forEach(function(link) {
+                        link.voted = votes.some(function(vote) {
+                            return vote === link.id;
+                        });
                     });
                 });
             }
-
-            // add to links information about wether the user has voted on the link already
-
             $scope.links = links;
-            console.log($scope.links);
+            $rootScope.userVotes = votes;
         }).catch(function(error) {
             console.log(error);
         });
@@ -122,12 +123,13 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
     $scope.removeVote = function($event) {
         console.log('clicked');
         var id = $event.path[2].id.split('-')[1];
-        // var username = 'schon';
+        // var username = 'harry';
         $http.post(`/removeVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
         });
     };
 });
+
 
 linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$uibModal) {
     // $scope.isVisible = false;
