@@ -7,7 +7,7 @@ $http.get(`/userVoted`).then(function(result) {
     localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
 });
 
-linkbinApp.controller('header',[ '$scope', '$uibModal', function($scope, $uibModal){
+linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', function($scope, $uibModal,$http){
     $scope.login = function() {
         var modalInstance = $uibModal.open({
             templateUrl: 'pages/login.html',
@@ -20,6 +20,14 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', function($scope, $uibMod
             controller: 'addLink'
         });
     };
+
+    $scope.logout = function() {
+        console.log('logging out');
+        $http.get('/logout').then(function(result) {
+            alert ('you are logged out');
+        })
+    };
+
 }]);
 
 linkbinApp.controller('frontPageListView', function($scope, $http) {

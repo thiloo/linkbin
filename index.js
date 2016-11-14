@@ -267,5 +267,11 @@ app.post('/api/login', function(req, res){
 
 });
 
+app.get('/logout', function(req,res) {
+        req.session = null;
+        res.json({
+            success:true
+        })
+})
 
 app.listen(8080);
