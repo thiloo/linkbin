@@ -293,7 +293,8 @@ linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance','$uibMod
                     controller: 'register'
                 });
             } else {
-                $location.path(`/link/${response.file.rows[0].id}`);
+                console.log(response);
+                $location.path(`/link/${response.data.file.rows[0].id}`);
             }
         });
         $uibModalInstance.close('close');
