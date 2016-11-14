@@ -2,16 +2,18 @@
 function setLocalStorage() {
     // script to verify which links a user has upvoted
     var $http = angular.injector(["ng"]).get("$http");
-    var username = 'harry';
+    // var username = 'harry';
     var votes;
 
     // obtain the array of upvoted articles from the database
-    $http.get(`/userVoted/${username}`).then(function(result){
+    $http.get(`/userVoted`).then(function(result){
         votes = JSON.stringify(result.data.file[0].voted_links);
-
+        console.log(votes);
         // store the array in local storage
         localStorage.setItem('userVotes', votes);
-    });
+    }).catch(function(err) {
+        console.log(err);
+    })
 }
 setLocalStorage();
 

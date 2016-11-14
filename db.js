@@ -190,8 +190,36 @@ exports.hashPassword = function(plainTextPassword){
     return bcrypt.hashSync(plainTextPassword, 10);
 };
 
+exports.checkPassword = function(textEnteredInLoginForm, hashedPasswordFromDatabase) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
+            if (err) {
+                console.log(err);
+                reject(err);
+            }
+            else {
+                console.log('match');
+                resolve(doesMatch);
+            }
+        });
+    });
+};
+
+
+
+exports.getUser = function(username){
+    return getFromDb('SELECT * FROM users WHERE username=$1',[username]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+
 exports.createUser = function(username, password){
-    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id', [username, password]).then(function(result){
+    return getFromDb('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING username', [username, password]).then(function(result){
         return result;
     }).catch(function(err){
         if(err){

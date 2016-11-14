@@ -8,6 +8,7 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    overflow-x: : hidden;
 }
 
 .fpLinkContainer {
