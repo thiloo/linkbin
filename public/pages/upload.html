@@ -1,9 +1,22 @@
 <div class="uploadContainer">
-    <div>
-        <form class="form-group" ng-submit="add()" novalidate>
-            <input type="text" ng-model="link.url" name="url" placeholder="URL" class="form-control addLinkInput" required />
-            <input type="text" ng-model="link.description" name="description" placeholder="Description" class="form-control addLinkInput" required />
-            <input type="submit" value="Submit"  class="btn" />
+    <div class="text-center">
+        <h2 class="popupHeadline">Add a link</h2>
+        <form class="form-horizontal" ng-submit="add()">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="text" ng-model="link.url" name="url" placeholder="URL" class="form-control" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <textarea type="text" ng-model="link.description" name="description" placeholder="Description" class="form-control addLinkInput" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="">
+                   <input type="submit" value="Submit" class="btn blueButton" />
+                </div>
+            </div>
         </form>
     </div>
 </div>

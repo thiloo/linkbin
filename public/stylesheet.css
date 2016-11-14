@@ -1,5 +1,13 @@
 body {
     margin: 0;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.fpListContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     overflow-x: : hidden;
 }
 
@@ -11,48 +19,62 @@ body {
     justify-content: flex-start;
     flex-direction: row;
     margin-top: 10px;
-    border-bottom: 2px dotted black;
+    border-bottom: 2px dotted #D8D8D8;
+    overflow: hidden;
 }
 
 .fpLinkHeadline {
-    font-size: 28px;
+    font-size: 24px;
     color: #4990E2;
     text-decoration: none;
-    width: 100%;
-    display: block;
+    width: auto;
+    display: inline-block;
 }
 
 .fpLinkTitle {
-    font-size: 24px;
+    font-size: 18px;
     color: grey;
     text-decoration: none;
     width: 100%;
     display: block;
+    text-overflow: ellipsis;
+}
+
+.fpDescriptionContainer {
+    width: 100%;
+    display: block;
+    align-items: baseline;
 }
 
 .fpLinkDescription {
-    font-size: 18px;
+    font-size: 16px;
     color: grey;
     text-decoration: none;
     white-space: nowrap;
     text-overflow: ellipsis;
+    display: inline-block;
 }
 
 .fpTimeDescription {
-    font-size: 18px;
+    font-size: 16px;
     color: grey;
+}
+
+.fpLinkSource {
+    position: relative;
+    float: right;
+    text-align:right;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 .fpUpVote {
     height: 30px;
 }
 
-.fpDownVote {
-    height: 30px;
-}
-
 .fpVoteCount {
     margin: 0;
+    margin-top: 8px;
     font-size: 18px;
     color: #D8D8D8;
     text-align: center;
@@ -60,6 +82,10 @@ body {
 
 .fpVoteCountContainer {
     margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .fpLinkContentContainer {
@@ -175,7 +201,7 @@ body {
     padding-bottom: 15px;
     height: 70px;
     /*border: 2px solid black;*/
-    background-color: #A9A9A9;
+    background-color: #D8D8D8;
 }
 
 
@@ -212,15 +238,9 @@ body {
     -ms-interpolation-mode: nearest-neighbor;
 }
 
-.fpLinkSource {
-    position: relative;
-    float:right;
-    left:20%;
-    bottom:24%;
-}
 
 .registerPopUp {
-    height: 300px;
+    height: 250px;
     width: 500px;
     display: flex;
     align-items: center;
@@ -228,13 +248,21 @@ body {
 }
 
 .uploadContainer {
-    height: 200px;
+    height: 320px;
     width: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding-top: 50px;
 }
 
 .addLinkInput {
     length: 300px;
+}
+
+.popupHeadline {
+    margin: 15px;
+    text-align: center;
+}
+
+.blueButton {
+    background-color: #4990E2;
+    color: white;
 }

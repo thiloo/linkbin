@@ -78,7 +78,7 @@ app.post('/insertLinkData', function(req,res) {
         var linkUrl = req.body.url,
         description = req.body.description,
         username = req.session.username,
-        source = url.parse(linkUrl).hostname,
+        source = url.parse(linkUrl).hostname || '',
         altImg = 'media/default.jpg';
         console.log(linkUrl);
         scrape.scraper(linkUrl).then(function(scraped) {
@@ -156,7 +156,6 @@ app.post('/insertReplyComment', function(req, res) {
 app.get('/getReplies/:parentId', function (req,res) {
     var parentId = req.params.parentId;
     db.getReplies(parentId).then(function(result) {
-        console.log(result);
         res.json({
             success:true,
             file:result.rows
@@ -223,7 +222,6 @@ app.get('/user/:username', function(req, res) {
 
 app.post('/user/register', function(req, res){
     var user = req.body;
-
     var hash = db.hashPassword(user.password);
     db.createUser(user.user_name, hash, csrfProtection).then(function(result){
         console.log(result);
@@ -264,7 +262,6 @@ app.post('/api/login', function(req, res){
             });
         }
     });
-
 });
 
 

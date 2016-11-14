@@ -11,7 +11,7 @@
             <h3 class="spDescription" ng-if="link.description.length < 99">{{link.description}}</h3>
             <h3 class="spDescription" ng-if="link.description.length > 99">{{link.description | limitTo : 100}}...</h3>
             <p class="spText"> Submitted by</p>
-            <a href="#/{{link.id}}" class="spText">{{link.username}}</a>
+            <a href="#/user/{{link.username}}" class="spText">{{link.username}}</a>
             <time class="spText" am-time-ago="link.created_at"></time>
         </div>
     </div>

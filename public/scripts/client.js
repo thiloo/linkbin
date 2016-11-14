@@ -36,11 +36,9 @@ linkbinApp.controller('frontPageListView', function($scope, $http) {
             //         });
             //     });
             // }
-
             // add to links information about wether the user has voted on the link already
 
             $scope.links = links;
-            console.log($scope.links);
         }).catch(function(error) {
             console.log(error);
         });
@@ -275,7 +273,7 @@ linkbinApp.controller('register', function($scope, $http) {
 });
 
 
-linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance','$uibModal', function($scope, $http, $uibModalInstance,$uibModal) {
+linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance','$uibModal', '$location', function($scope, $http, $uibModalInstance, $uibModal, $location) {
     $scope.add = function() {
         var config = {
             method: 'POST',
@@ -290,10 +288,12 @@ linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance','$uibMod
         $http(config).then(function(response){
             console.log(response);
             if(!response.data.success) {
-                    var modalInstance = $uibModal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'pages/login.html',
                     controller: 'register'
                 });
+            } else {
+                $location.path(`/link/${response.file.rows[0].id}`);
             }
         });
         $uibModalInstance.close('close');

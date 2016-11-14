@@ -1,13 +1,25 @@
 <div class="registerPopUp">
-    <div>
-        <h2>Login / Signup</h2>
+    <div class="text-center">
+        <h2 class="popupHeadline">Login / Signup</h2>
         <div>
-            <form class="form-signin">
+            <form class="form-horizontal">
                 <div ng-show="invalidLogin" class="alert alert-danger">Invalid username/password</div>
-                <input type="text"  placeholder="Username" ng-model="user.username" ng-required="true"/>
-                <input type="password"  placeholder="Password" ng-model="user.password" ng-required="true"/>
-                <button ng-click="register()">Register</button>
-                <button ng-click="login()">Login</button>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="text" class="form-control" placeholder="Username" ng-model="user.username" ng-required="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="password" class="form-control" placeholder="Password" ng-model="user.password" ng-required="true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="">
+                       <button ng-click="login()" class="btn blueButton">Login</button>
+                        <button ng-click="register()" class="btn blueButton">Signup</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
