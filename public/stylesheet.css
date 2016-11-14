@@ -1,22 +1,240 @@
+body {
+    margin: 0;
+    overflow-x: : hidden;
+}
+
 .fpLinkContainer {
-    height: 300px;
-    width: 80%;
+    height: 110px;
+    width: 100%;
+    padding-left: 20px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin-top: 10px;
+    border-bottom: 2px dotted black;
 }
 
 .fpLinkHeadline {
     font-size: 28px;
-    color: blue;
+    color: #4990E2;
     text-decoration: none;
+    width: 100%;
+    display: block;
 }
 
 .fpLinkTitle {
     font-size: 24px;
     color: grey;
     text-decoration: none;
+    width: 100%;
+    display: block;
 }
 
 .fpLinkDescription {
     font-size: 18px;
     color: grey;
     text-decoration: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fpTimeDescription {
+    font-size: 18px;
+    color: grey;
+}
+
+.fpUpVote {
+    height: 30px;
+}
+
+.fpDownVote {
+    height: 30px;
+}
+
+.fpVoteCount {
+    margin: 0;
+    font-size: 18px;
+    color: #D8D8D8;
+    text-align: center;
+}
+
+.fpVoteCountContainer {
+    margin-right: 20px;
+}
+
+.fpLinkContentContainer {
+    position: relative;
+    display: inline-block;
+    left:2%;
+}
+
+.spLinkContainer {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.spTitle {
+    display: block;
+    font-size: 36px;
+    color: #4990E2;
+    margin: 10px 0;
+}
+
+.spText {
+    display: inline-block;
+    margin: 0;
+    color: grey;
+}
+
+.spLinkContentContainer a {
+    text-decoration: none;
+}
+
+.spDescription {
+    display: block;
+    font-size: 22px;
+    color: grey;
+    margin: 0;
+}
+
+.spUpVote {
+    height: 50px;
+}
+
+.spDownVote {
+    height: 50px;
+}
+
+.spVoteCount {
+    margin: 0;
+    font-size: 24px;
+    color: #D8D8D8;
+    text-align: center;
+}
+
+.spVoteCountContainer {
+    margin: 0 30px;
+}
+
+.commentContainer {
+    min-height: 40px;
+    margin-left: 40px;
+    margin-top: 20px;
+}
+
+.commentDescription {
+    text-decoration: none;
+    color: darkgreen;
+    margin: 0;
+    display: inline-block;
+}
+
+.commentText {
+    margin: 5px 0;
+}
+
+.postCommentContainer {
+    padding-top: 50px;
+    padding-bottom: 30px;
+    margin-left: 40px;
+}
+
+.postCommentTextArea {
+    height: 150px;
+    width: 350px;
+}
+
+.postCommentButton {
+    background-color: #4990E2;
+    height: 25px;
+    width: auto;
+    border: none;
+    color: white;
+}
+
+.replies {
+    position: relative;
+    left: 60px;
+}
+
+.reply {
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-decoration: underline;
+    font-size:18px;
+    color:#4990E2;
+}
+
+.headerContainer {
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    height: 70px;
+    /*border: 2px solid black;*/
+    background-color: #A9A9A9;
+}
+
+
+.headerButton {
+    background-color: #4990E2;
+    color: white;
+    height: 40px;
+    width: auto;
+    float: right;
+    border: none;
+    margin: 0;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.headerTitle {
+    display: inline-block;
+    font-size: 28px;
+    font-family: sans-serif;
+    margin: 0;
+    color: #191970;
+    font-weight: 700;
+}
+
+.picture {
+    position:relative;
+    overflow: hidden;
+    width: 90px;
+    height:90px;
+    image-rendering: -moz-crisp-edges;
+    image-rendering:   -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
+.fpLinkSource {
+    position: relative;
+    float:right;
+    left:20%;
+    bottom:24%;
+}
+
+.registerPopUp {
+    height: 300px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uploadContainer {
+    height: 200px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.addLinkInput {
+    length: 300px;
 }

@@ -1,0 +1,51 @@
+<div>
+    <div class="spLinkContainer" id="link-{{link.id}}">
+        <div class="spVoteCountContainer" ng-switch on="link.voted">
+            <img class="spUpVote" src="/media/star.png" ng-switch-default ng-click="addVote($event); link.voted= true; link.votes = link.votes + 1" />
+            <img class="spUpVote" src="/media/stared.png" ng-switch-when="true" ng-click="addVote($event); link.voted= false; link.votes = link.votes - 1" />
+            <p class="spVoteCount">{{link.votes}}</p>
+        </div>
+
+        <div class="spLinkContentContainer">
+            <a href="{{link.url}}"><h1 class="spTitle">{{link.link_headline}}</h1></a>
+            <h3 class="spDescription" ng-if="link.description.length < 99">{{link.description}}</h3>
+            <h3 class="spDescription" ng-if="link.description.length > 99">{{link.description | limitTo : 100}}...</h3>
+            <p class="spText"> Submitted by</p>
+            <a href="#/{{link.id}}" class="spText">{{link.username}}</a>
+            <time class="spText" am-time-ago="link.created_at"></time>
+        </div>
+    </div>
+
+    <div class="postCommentContainer">
+        <textarea class="postCommentTextArea" ng-model="comment"></textarea>
+        <button class="postCommentButton" ng-click="submitComment()">Add Comment </button>
+    </div>
+
+    <div ng-repeat="comment in comments" class="commentContainer" id="comment-{{comment.id}}">
+        <p class="commentText">{{comment.comment}}</p>
+        <a class="commentDescription">{{comment.username}}</a> | posted <time am-time-ago="comment.created_at"></time> |
+        <p class="commentDescription">
+        </p>
+
+        <button ng-click="showReplyBox = !showReplyBox; reply($event)" class="reply"=>reply</button>
+
+        <div ng-show="showReplyBox">
+
+            <textarea class="postReplyTextArea"></textarea>
+            <button ng-click="submitReply($event)">submit</button>
+        </div>
+
+
+        <div class="replyContainer">
+            <button id="getRepliesButton" ng-click="getReplies($event)">
+                {{ comment.num_of_replies === 1 ? comment.num_of_replies + ' reply' : comment.num_of_replies + ' replies' }}
+            </button>
+            <div class="replies">
+                <div ng-repeat='reply in comment.replies'>
+                    <p class="commentText">{{reply.comment}}</p>
+                    <a class="commentDescription">{{reply.username}}</a> | posted <time am-time-ago="reply.created_at"></time>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

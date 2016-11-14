@@ -4,18 +4,23 @@
         <meta charset="utf-8">
         <title>Linkbin</title>
         <link rel="stylesheet" href="stylesheet.css" media="screen" title="no title">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-        <script src="client.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"></script>
+        <script src="scripts/ui-bootstrap.js"></script>
+        <script src="scripts/voted.js"></script>
+        <script src="scripts/client.js"></script>
+        <script src="scripts/angular-route.js"></script>
+
     </head>
     <body ng-app="linkbinApp">
-        <div ng-controller="frontPageList">
-            <div ng-repeat="link in links" id="link-id" class="fpLinkContainer">
-                <a href="{{link.link}}" class="fpLinkHeadline">{{link.headline_in_link}}</a><br />
-                <a href="#" class="fpLinkTitle">{{link.given_title}}</a><br />
-                <a href="#" class="fpLinkDescription">{{link.num_of_comments}} comments</a> |
-                <a href="#" class="fpLinkDescription">{{link.username}}</a> |
-                <a href="#" class="fpLinkDescription">{{link.created_at}}</a>
-            </div>
-        </div>
+        <div ng-controller="header"><div ng-include src="'pages/header.html'"></div></div>
+        <div ng-view></div>
+
+        <!-- MomentJS is need to display passed time dynamically -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/1.0.0/angular-moment.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-cookies.js"></script>
+
     </body>
 </html>

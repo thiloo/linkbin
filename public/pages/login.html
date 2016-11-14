@@ -1,0 +1,14 @@
+<div class="registerPopUp">
+    <div>
+        <h2>Login / Signup</h2>
+        <div>
+            <form class="form-signin">
+                <div ng-show="invalidLogin" class="alert alert-danger">Invalid username/password</div>
+                <input type="text"  placeholder="Username" ng-model="user.username" ng-required="true"/>
+                <input type="password"  placeholder="Password" ng-model="user.password" ng-required="true"/>
+                <button ng-click="register()">Register</button>
+                <button ng-click="login()">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
