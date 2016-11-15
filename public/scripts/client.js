@@ -3,6 +3,8 @@ const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment', 'ui
 linkbinApp.run(function($rootScope,$http) {
     $http.get('/checkLog').then(function(result) {
         if (result.data.success===true) {
+            $rootScope.username=result.data.file;
+            console.log($rootScope.username);
             $rootScope.log = true;
             $http.get('/userVoted').then(function(result){
                 $rootScope.userVotes = result.data.file[0].voted_links || [];
@@ -10,11 +12,12 @@ linkbinApp.run(function($rootScope,$http) {
         }
         else {
             $rootScope.log = false;
+            $rootScope.username = null;
         }
     });
 });
 
-linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', function($scope, $uibModal,$http,$window){
+linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', '$rootScope', function($scope, $uibModal,$http,$window,$rootScope){
     $scope.login = function() {
         var modalInstance = $uibModal.open({
             templateUrl: 'pages/login.html',
@@ -22,10 +25,15 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', func
         });
     };
     $scope.addLink = function() {
-        var uibModalInstance = $uibModal.open({
-            templateUrl: 'pages/upload.html',
-            controller: 'addLink'
-        });
+        if($rootScope.log===false) {
+            $scope.login();
+        }
+        else {
+            var uibModalInstance = $uibModal.open({
+                templateUrl: 'pages/upload.html',
+                controller: 'addLink'
+            });
+        }
     };
 
     $scope.logout = function() {
@@ -155,7 +163,16 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
         }
     };
 
+    $scope.reply = function($event) {
+        if($rootScope.log===false) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'pages/login.html',
+                controller: 'register'
+            });
+        }
+    }
     $scope.submitReply = function($event,data) {
+
         var text = $event.target.parentNode.querySelector('textarea');
         var comment = text.value;
         var parentId = parseInt($event.path[2].id.split('-')[1]);
@@ -211,15 +228,15 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
             }
         });
     };
+    // }
 
 });
 
-linkbinApp.controller('register', function($scope, $http, $rootScope, $window) {
+linkbinApp.controller('register', function($scope, $http, $rootScope, $uibModalInstance) {
     $scope.user = {username: '', password: ''};
     $scope.message = '';
 
     $scope.login = function(){
-        console.log($scope.user);
         var config = {
             method: 'POST',
             data: {
@@ -228,10 +245,17 @@ linkbinApp.controller('register', function($scope, $http, $rootScope, $window) {
             },
             url:'/api/login'
         };
-        $http(config).success(function(response){
-            $rootScope.log = true;
-            $rootScope.userVotes = response.file[0].voted_links;
-            $window.location.reload();
+        $http(config).then(function(response){
+            if (response.data.success===false) {
+                $scope.invalidLogin = true;
+            }
+            else {
+                $rootScope.log = true;
+                $rootScope.username = response.data.file[0].username;
+                $rootScope.userVotes = response.data.file[0].voted_links;
+                window.location.reload();
+                // $uibModalInstance.close('close');
+            }
         });
     };
 
@@ -245,9 +269,17 @@ linkbinApp.controller('register', function($scope, $http, $rootScope, $window) {
             },
             url:'/user/register'
         };
-        $http(config).success(function(response){
-            $window.location.reload();
-            console.log(response);
+        $http(config).then(function(response){
+            if(response.data.success===false) {
+                $scope.errorInRegister = true;
+            }
+            else {
+                $rootScope.log = true;
+                $rootScope.username = response.data.file[0].username;
+                console.log(response);
+                window.location.reload();
+                // $uibModalInstance.close('close');
+            }
         });
     };
 });
@@ -259,7 +291,7 @@ linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance','$uibMod
             method: 'POST',
             data: {
                 url:  $scope.link.url,
-                description:  $scope.link.description,
+                description:  $scope.link.description
             },
             url:'/insertLinkData'
         };

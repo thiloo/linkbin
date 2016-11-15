@@ -243,9 +243,17 @@ body {
 
 
 .registerPopUp {
+    position:relative;
     height: 250px;
     width: 500px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.text-center {
+    text-align: center;
     align-items: center;
     justify-content: center;
 }
@@ -261,11 +269,37 @@ body {
 }
 
 .popupHeadline {
+    position:relative;
+    left: 22%;
     margin: 15px;
     text-align: center;
+}
+
+.form-horizontal {
+    position: relative;
+    text-align: center;
+    left:15%;
 }
 
 .blueButton {
     background-color: #4990E2;
     color: white;
+}
+
+.wrongLogin {
+    position: relative;
+    color: red;
+    text-align: center;
+    font-weight: 800;
+    left:8%
+}
+
+
+#subtitle {
+    display: inline-block;
+    font-size: 14px;
+    font-family: sans-serif;
+    margin: 0;
+    color: #191970;
+    font-weight: 500;
 }

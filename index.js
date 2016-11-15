@@ -60,10 +60,10 @@ app.post('/insertLinkData', function(req, res) {
         res.json({success: false});
     } else {
         var linkUrl = req.body.url,
-            description = req.body.description,
-            username = req.session.username,
-            source = url.parse(linkUrl).hostname || '',
-            altImg = 'media/default.jpg';
+        description = req.body.description,
+        username = req.session.username,
+        source = url.parse(linkUrl).hostname || '',
+        altImg = 'media/default.jpg';
         console.log(linkUrl);
         scrape.scraper(linkUrl).then(function(scraped) {
             console.log(scraped);
@@ -77,7 +77,6 @@ app.post('/insertLinkData', function(req, res) {
             });
         });
     }
-
 });
 
 app.post('/insertNormalComment', function(req, res) {
@@ -175,11 +174,15 @@ app.post('/user/register', function(req, res) {
     var user = req.body;
     var hash = db.hashPassword(user.password);
     db.createUser(user.user_name, hash, csrfProtection).then(function(result) {
-        console.log(result);
         req.session.username = result.rows[0].username;
-        console.log(req.session.username);
         res.json({success: true, file: result.rows});
-    });
+    }).catch(function(err) {
+        if(err) {
+            res.json({
+                success:false
+            });
+        }
+    })
 });
 
 app.post('/api/login', function(req, res) {
@@ -188,18 +191,21 @@ app.post('/api/login', function(req, res) {
     console.log(login);
 
     db.getUser(login.user_name).then(function(result) {
-        if (result.rows[0].length === 0) {
-            console.log('no such user');
-            }
-            else {
-            console.log(login.password);
-            console.log(result);
+        console.log(result.rows);
+        if (result.rows.length === 0) {
+            res.json({
+                success:false
+            });
+        }
+        else {
             db.checkPassword(login.password, result.rows[0].password).then(function(doesMatch) {
                 if (doesMatch) {
                     req.session.username = login.user_name;
                     res.json({sucesss: true, file: result.rows});
                 } else {
-                    console.log('wrong password, try again');
+                    res.json({
+                        success:false
+                    });
                 }
             });
         }
@@ -208,7 +214,10 @@ app.post('/api/login', function(req, res) {
 
 app.get('/checkLog', function(req, res) {
     if (req.session.username) {
-        res.json({success: true});
+        res.json({
+            success: true,
+            file: req.session.username
+    });
     } else {
         res.json({success: false});
     }
