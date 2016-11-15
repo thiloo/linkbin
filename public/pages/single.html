@@ -1,26 +1,37 @@
-<div class="container">
-    <div class="spLinkContainer" id="link-{{link.id}}">
-        <div class="spVoteCountContainer" ng-switch on="link.voted">
-            <img class="spUpVote" src="/media/star.png" ng-switch-default ng-click="addVote($event); link.voted= true; link.votes = link.votes + 1" />
-            <img class="spUpVote" src="/media/stared.png" ng-switch-when="true" ng-click="addVote($event); link.voted= false; link.votes = link.votes - 1" />
-            <p class="spVoteCount">{{link.votes}}</p>
-        </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="spLinkContainer col-md-12" id="link-{{link.id}}">
+            <div class="spVoteCountContainer col-md-1 col-sm-2 col-xs-2" ng-switch on="link.voted">
+                <img class="spUpVote" src="/media/star.png" ng-switch-default ng-click="addVote($event); link.voted= true; link.votes = link.votes + 1" />
+                <img class="spUpVote" src="/media/stared.png" ng-switch-when="true" ng-click="addVote($event); link.voted= false; link.votes = link.votes - 1" />
+                <p class="spVoteCount">{{link.votes}}</p>
+            </div>
+            <div class="spPictureContainer col-md-2">
+                <img class="spPicture hidden-xs" src="{{link.picture_url}}" />
+            </div>
+            <div class="spLinkContentContainer">
+                <div class="row">
+                    <a href="{{link.url}}"><h1 class="col-md-10 spTitle">{{link.link_headline}}</h1></a>
+                </div>
+                <div class="row">
+                    <h3 class="col-md-10  spDescription" ng-if="link.description.length">{{link.description}}</h3>
+                </div>
+                <div class="row spDescriptionContainer">
+                    <p class="spText"> Submitted by</p>
+                    <a href="#/user/{{link.username}}" class="spText">{{link.username}}</a>
+                    <time class="spText" am-time-ago="link.created_at"></time>
+                </div>
 
-        <div class="spLinkContentContainer">
-            <a href="{{link.url}}"><h1 class="spTitle">{{link.link_headline}}</h1></a>
-            <h3 class="spDescription" ng-if="link.description.length < 99">{{link.description}}</h3>
-            <h3 class="spDescription" ng-if="link.description.length > 99">{{link.description | limitTo : 100}}...</h3>
-            <p class="spText"> Submitted by</p>
-            <a href="#/user/{{link.username}}" class="spText">{{link.username}}</a>
-            <time class="spText" am-time-ago="link.created_at"></time>
+            </div>
         </div>
     </div>
 
+
     <div class="postCommentContainer">
-        <div ng-hide="log===false">
-            <textarea class="postCommentTextArea" ng-model="comment"></textarea><br />
+        <div class="row" ng-hide="log===false">
+            <textarea class="postCommentTextArea col-md-4 col-sm-6 col-xs-10" rows="6" ng-model="comment"></textarea><br />
         </div>
-        <button class="btn blueButton" ng-click="submitComment()">Add Comment </button>
+        <button class="btn blueButton row" ng-click="submitComment()">Add Comment</button>
     </div>
 
     <div ng-repeat="comment in comments" class="commentContainer" id="comment-{{comment.id}}">

@@ -1,24 +1,31 @@
-<div ng-controller="frontPageListView" class="fpListContainer">
-    <div ng-repeat="link in links" id="link-{{link.id}}" class="fpLinkContainer" >
-        <div class="fpVoteCountContainer" ng-switch on="link.voted">
-            <img class="fpUpVote" src="/media/stared.png" ng-click="removeVote($event); link.voted = false; link.votes = link.votes - 1" ng-switch-when="true"/>
-            <img class="fpUpVote" src="/media/star.png" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" ng-switch-default/>
-            <p class="fpVoteCount">{{link.votes}}</p>
-        </div>
-
-        <img class="picture" src="{{link.picture_url}}" alt>
-        <div class="fpLinkContentContainer">
-            <a href="{{link.url}}" class="fpLinkHeadline" ng-if="link.link_headline.length <= 80">{{link.link_headline}}</a>
-            <a href="{{link.url}}" class="fpLinkHeadline" ng-if="link.link_headline.length > 80">{{link.link_headline | limitTo: 80}}...</a>
-            <a href="http://{{link.source}}" class="fpLinkSource">( {{link.source}} )</a>
-            <a href="#/link/{{link.id}}" class="fpLinkTitle" ng-if="link.description.length < 99">{{link.description}}</a>
-            <a href="#/link/{{link.id}}" class="fpLinkTitle" ng-if="link.description.length > 99">{{link.description | limitTo : 100}}...</a>
-            <div class="fpDescriptionContainer">
-                <a href="#/link/{{link.id}}" class="fpLinkDescription">
-                    {{ link.num_of_comments === 1 ? link.num_of_comments + ' comment' : link.num_of_comments  + ' comments' }}
-                </a> |
-                <a href="#/user/{{link.username}}" class="fpLinkDescription">{{link.username}}</a> |
-                <time class="fpTimeDescription" am-time-ago="link.created_at"></time>
+<div ng-controller="frontPageListView" class="container-fluid fpListContainer">
+    <div ng-repeat="link in links" id="link-{{link.id}}" class="row fpLinkContainer" >
+        <div class="col-md-12">
+            <div class="fpVoteCountContainer col-md-1 col-xs-1 col-sd-1" ng-switch on="link.voted">
+                <!-- <div class=""> -->
+                    <img class="fpUpVote" src="/media/stared.png" ng-click="removeVote($event); link.voted = false; link.votes = link.votes - 1" ng-switch-when="true"/>
+                    <img class="fpUpVote" src="/media/star.png" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" ng-switch-default/>
+                    <p class="fpVoteCount">{{link.votes}}</p>
+                <!-- </div> -->
+            </div>
+            <div class="col-md-1">
+                <img class="picture hidden-sm hidden-xs" src="{{link.picture_url}}" />
+            </div>
+            <div class="fpLinkContentContainer col-md-9 col-xs-10">
+                <div class="row">
+                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-xs-10" ng-if="link.link_headline.length <= 80">{{link.link_headline}}</a>
+                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-xs-10" ng-if="link.link_headline.length > 80">{{link.link_headline | limitTo: 80}}...</a>
+                    <a href="http://{{link.source}}" class="fpLinkSource hidden-xs col-md-3">( {{link.source}} )</a>
+                </div>
+                <a href="#/link/{{link.id}}" class="fpLinkTitle" ng-if="link.description.length < 99">{{link.description}}</a>
+                <a href="#/link/{{link.id}}" class="fpLinkTitle" ng-if="link.description.length > 99">{{link.description | limitTo : 100}}...</a>
+                <div class="fpDescriptionContainer">
+                    <a href="#/link/{{link.id}}" class="fpLinkDescription">
+                        {{ link.num_of_comments === 1 ? link.num_of_comments + ' comment' : link.num_of_comments  + ' comments' }}
+                    </a> |
+                    <a href="#/user/{{link.username}}" class="fpLinkDescription">{{link.username}}</a> |
+                    <time class="fpTimeDescription" am-time-ago="link.created_at"></time>
+                </div>
             </div>
         </div>
     </div>
