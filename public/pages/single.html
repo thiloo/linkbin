@@ -20,7 +20,7 @@
         <div ng-hide="log===false">
             <textarea class="postCommentTextArea" ng-model="comment"></textarea><br />
         </div>
-        <button class="btn blueButton col-md-offset-2" ng-click="submitComment()">Add Comment </button>
+        <button class="btn blueButton" ng-click="submitComment()">Add Comment </button>
     </div>
 
     <div ng-repeat="comment in comments" class="commentContainer" id="comment-{{comment.id}}">

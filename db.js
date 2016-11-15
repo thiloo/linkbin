@@ -239,6 +239,16 @@ exports.getUserLinks = function(username) {
     });
 };
 
+// url,link_headline,description,username,votes, source,picture_url,num_of_comments,created_at',
+
+exports.getFavorites = function(username) {
+    console.log(username);
+    return getFromDb('SELECT * FROM users WHERE username = $1', [username]).then(function(result) {
+        var arr = result.rows[0].voted_links;
+            return getFromDb('SELECT * FROM links WHERE id in (' + arr +')')
+        });
+}
+
 
 function getFromDb(str, params) {
     return new Promise(function(resolve, reject) {

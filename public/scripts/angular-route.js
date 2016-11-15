@@ -20,4 +20,8 @@ linkbinApp.config(function($routeProvider) {
             templateUrl: 'pages/user.html',
             controller: 'userView'
         })
+        .when('/favorites', {
+            templateUrl: 'pages/favorites.html',
+            controller: 'favorites'
+        })
 });
