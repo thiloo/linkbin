@@ -1,8 +1,7 @@
 linkbinApp.config(function($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'pages/home.html',
-            controller: 'frontPageListView'
+            templateUrl: 'pages/home.html'
         })
         .when('/link/:id', {
             templateUrl: 'pages/single.html',

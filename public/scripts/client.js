@@ -4,7 +4,6 @@ linkbinApp.run(function($rootScope,$http) {
     $http.get('/checkLog').then(function(result) {
         if (result.data.success===true) {
             $rootScope.username=result.data.file;
-            console.log($rootScope.username);
             $rootScope.log = true;
             $http.get('/userVoted').then(function(result){
                 $rootScope.userVotes = result.data.file[0].voted_links || [];
