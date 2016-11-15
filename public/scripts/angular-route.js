@@ -1,7 +1,8 @@
 linkbinApp.config(function($routeProvider) {
     $routeProvider
         .when('/', {
-            templateUrl: 'pages/home.html'
+            templateUrl: 'pages/home.html',
+            controller: 'frontPageListView'
         })
         .when('/link/:id', {
             templateUrl: 'pages/single.html',
@@ -16,11 +17,11 @@ linkbinApp.config(function($routeProvider) {
             controller: 'addLink'
         })
         .when('/user/:username', {
-            templateUrl: 'pages/user.html',
+            templateUrl: 'pages/home.html',
             controller: 'userView'
         })
         .when('/favorites', {
-            templateUrl: 'pages/favorites.html',
+            templateUrl: 'pages/home.html',
             controller: 'favorites'
         })
 });
