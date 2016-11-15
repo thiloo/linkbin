@@ -159,9 +159,19 @@ app.get('/userVoted', function(req, res) {
 
 app.get('/user/:username', function(req, res) {
     var username = req.params.username;
-    console.log(req.params);
-    console.log(username);
     db.getUserLinks(username).then(function(result) {
+        res.json({success: true, file: result.rows});
+    }).catch(function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+});
+
+app.get('/favorites', function(req, res) {
+    var username = req.session.username;
+    db.getFavorites(username).then(function(result) {
+        console.log(result.rows);
         res.json({success: true, file: result.rows});
     }).catch(function(err) {
         if (err) {
@@ -217,7 +227,7 @@ app.get('/checkLog', function(req, res) {
         res.json({
             success: true,
             file: req.session.username
-    });
+        });
     } else {
         res.json({success: false});
     }
