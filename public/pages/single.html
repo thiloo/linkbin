@@ -1,4 +1,4 @@
-<div>
+<div class="container">
     <div class="spLinkContainer" id="link-{{link.id}}">
         <div class="spVoteCountContainer" ng-switch on="link.voted">
             <img class="spUpVote" src="/media/star.png" ng-switch-default ng-click="addVote($event); link.voted= true; link.votes = link.votes + 1" />
@@ -18,9 +18,9 @@
 
     <div class="postCommentContainer">
         <div ng-hide="log===false">
-        <textarea class="postCommentTextArea" ng-model="comment"></textarea>
-    </div>
-        <button class="postCommentButton" ng-click="submitComment()">Add Comment </button>
+            <textarea class="postCommentTextArea" ng-model="comment"></textarea><br />
+        </div>
+        <button class="btn blueButton col-md-offset-2" ng-click="submitComment()">Add Comment </button>
     </div>
 
     <div ng-repeat="comment in comments" class="commentContainer" id="comment-{{comment.id}}">
