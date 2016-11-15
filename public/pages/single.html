@@ -17,7 +17,9 @@
     </div>
 
     <div class="postCommentContainer">
+        <div ng-hide="log===false">
         <textarea class="postCommentTextArea" ng-model="comment"></textarea>
+    </div>
         <button class="postCommentButton" ng-click="submitComment()">Add Comment </button>
     </div>
 
