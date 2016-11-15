@@ -1,27 +1,18 @@
-
 const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment', 'ui.bootstrap']);
-
-//angularMoment displays time passed dynamically, included via CDN in index.html
-var $http = angular.injector(["ng"]).get("$http");
 
 linkbinApp.run(function($rootScope,$http) {
     $http.get('/checkLog').then(function(result) {
         if (result.data.success===true) {
             $rootScope.log = true;
             $http.get('/userVoted').then(function(result){
-                $rootScope.userVots = result.data.file[0].voted_links;
+                $rootScope.userVotes = result.data.file[0].voted_links || [];
             });
         }
         else {
             $rootScope.log = false;
         }
     });
-})
-// var username = 'harry';
-$http.get(`/userVoted`).then(function(result) {
-    localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
 });
-
 
 linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', function($scope, $uibModal,$http,$window){
     $scope.login = function() {
@@ -38,10 +29,9 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', func
     };
 
     $scope.logout = function() {
-        console.log('logging out');
         $http.get('/logout').then(function(result) {
             $window.location.reload();
-        })
+        });
     };
 
 }]);
@@ -49,21 +39,16 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', func
 linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
     $scope.load = function() {
         $http.get('/homepage').then(function(content) {
-            console.log($rootScope.log);
             var links = content.data.file;
-            var votes;
             if($rootScope.log === true) {
-                $http.get('/userVoted').then(function(result){
-                    votes = result.data.file[0].voted_links;
-                    links.forEach(function(link) {
-                        link.voted = votes.some(function(vote) {
-                            return vote === link.id;
-                        });
+                var votes = $rootScope.userVotes;
+                links.forEach(function(link) {
+                    link.voted = votes.some(function(vote) {
+                        return vote === link.id;
                     });
                 });
             }
             $scope.links = links;
-            $rootScope.userVotes = votes;
         }).catch(function(error) {
             console.log(error);
         });
@@ -71,22 +56,18 @@ linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
     $scope.load();
     $scope.addVote = function($event) {
         var id = $event.path[2].id.split('-')[1];
-        // var username = 'harry';
         $http.post(`/addVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
 
         });
     };
     $scope.removeVote = function($event) {
-        console.log('clicked');
         var id = $event.path[2].id.split('-')[1];
-        // var username = 'harry';
         $http.post(`/removeVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
         });
     };
 });
-
 
 linkbinApp.controller('userView', function($scope, $http, $location, $rootScope) {
     $scope.load = function() {
@@ -94,19 +75,15 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
         var username = url.split('/')[2];
         $http.get(`/user/${username}`).then(function(content) {
             var links = content.data.file;
-            var votes;
             if($rootScope.log === true) {
-                $http.get('/userVoted').then(function(result){
-                    votes = result.data.file[0].voted_links;
-                    links.forEach(function(link) {
-                        link.voted = votes.some(function(vote) {
-                            return vote === link.id;
-                        });
+                var votes = $rootScope.userVotes;
+                links.forEach(function(link) {
+                    link.voted = votes.some(function(vote) {
+                        return vote === link.id;
                     });
                 });
             }
             $scope.links = links;
-            $rootScope.userVotes = votes;
         }).catch(function(error) {
             console.log(error);
         });
@@ -114,31 +91,24 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
     $scope.load();
     $scope.addVote = function($event) {
         var id = $event.path[2].id.split('-')[1];
-        // var username = 'harry';
         $http.post(`/addVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
-
         });
     };
     $scope.removeVote = function($event) {
-        console.log('clicked');
         var id = $event.path[2].id.split('-')[1];
-        // var username = 'harry';
         $http.post(`/removeVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
         });
     };
 });
 
-
-linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$uibModal) {
-    // $scope.isVisible = false;
+linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $uibModal, $rootScope) {
     $scope.load = function() {
         $http.get(`/link/${$routeParams.id}`).then(function(content) {
             var link = content.data.file.link[0];
-            var votes = getVotes();
-            if (votes !== null) {
-                votes = getVotes()[0].voted_links;
+            if($rootScope.log === true) {
+                var votes = $rootScope.userVotes;
                 link.voted = votes.some(function(vote) {
                     return vote === link.id;
                 });
@@ -152,7 +122,6 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
     $scope.load();
     $scope.addVote = function($event) {
         var id = $event.path[2].id.split('-')[1];
-        // var username = 'harry';
         $http.post(`/addVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
 
@@ -160,7 +129,6 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
     };
     $scope.removeVote = function($event) {
         var id = $event.path[2].id.split('-')[1];
-        // var username = 'harry';
         $http.post(`/removeVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
         });
@@ -179,8 +147,6 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
                 else {
                     $http.get(`/getReplies/${parentId}`).then(function(content) {
                         $scope.comments[place].replies = content.data.file;
-                        console.log($scope.comments[i]);
-
                     }).catch(function(error) {
                         console.log(error);
                     });
@@ -192,13 +158,11 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
     $scope.submitReply = function($event,data) {
         var text = $event.target.parentNode.querySelector('textarea');
         var comment = text.value;
-        // var username = 'tempUsername'
         var parentId = parseInt($event.path[2].id.split('-')[1]);
         var linkId = $routeParams.id;
         var obj = {
             'comment': comment,
             'linkId': linkId,
-            // 'username': username,
             'parentId':parentId
         };
         text.value = '';
@@ -218,10 +182,8 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
                             break;
                         }
                         else {
-                            console.log('no replies!')
                             $scope.comments[i].replies=content.data.file[0];
                             $scope.comments[i].num_of_replies +=1;
-                            console.log($scope.comments[i].replies=content.data.file)
                             break;
                         }
                     }
@@ -231,12 +193,10 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
     };
     $scope.submitComment = function() {
         var comment = $scope.comment;
-        // var username = 'tempUsername';
         var linkId = $routeParams.id;
         var obj = {
             'comment': comment,
             'linkId': linkId,
-            // 'username': username
         };
         $http.post('/insertNormalComment', obj).then(function(content) {
             if(!content.data.success) {
@@ -249,7 +209,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams,$ui
                 $scope.comments.unshift(content.data.file);
                 $scope.comment = '';
             }
-        })
+        });
     };
 
 });
@@ -277,8 +237,6 @@ linkbinApp.controller('register', function($scope, $http, $rootScope, $window) {
 
 
     $scope.register = function(){
-        console.log($scope.user);
-
         var config = {
             method: 'POST',
             data: {
@@ -291,10 +249,6 @@ linkbinApp.controller('register', function($scope, $http, $rootScope, $window) {
             $window.location.reload();
             console.log(response);
         });
-
-
-        //TODO ajax route on login to see the token 1)csrf-token 2)
-
     };
 });
 
@@ -306,20 +260,16 @@ linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance','$uibMod
             data: {
                 url:  $scope.link.url,
                 description:  $scope.link.description,
-                // username: 'harry'
             },
             url:'/insertLinkData'
         };
-        console.log('should be sumbitted: ',config);
         $http(config).then(function(response){
-            console.log(response);
             if(!response.data.success) {
                 var modalInstance = $uibModal.open({
                     templateUrl: 'pages/login.html',
                     controller: 'register'
                 });
             } else {
-                console.log(response);
                 $location.path(`/link/${response.data.file.rows[0].id}`);
             }
         });
