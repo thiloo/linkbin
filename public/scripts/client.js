@@ -34,10 +34,9 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', '$ro
             });
         }
     };
-
     $scope.logout = function() {
         $http.get('/logout').then(function(result) {
-            $window.location.reload();
+            $window.location.href = '/';
         });
     };
 
@@ -81,6 +80,7 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
         var url = $location.path();
         var username = url.split('/')[2];
         $http.get(`/user/${username}`).then(function(content) {
+            console.log(content);
             var links = content.data.file;
             if($rootScope.log === true) {
                 var votes = $rootScope.userVotes;
@@ -109,6 +109,43 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
         });
     };
 });
+
+
+linkbinApp.controller('favorites', function($scope, $http, $location, $rootScope) {
+    $scope.load = function() {
+        $http.get('/favorites').then(function(content) {
+            var links = content.data.file;
+            console.log(links);
+            if($rootScope.log === true) {
+                var votes = $rootScope.userVotes;
+                links.forEach(function(link) {
+                    link.voted = votes.some(function(vote) {
+                        return vote === link.id;
+                    });
+                });
+            }
+            $scope.links = links;
+        }).catch(function(error) {
+            console.log(error);
+        });
+    };
+    $scope.load();
+    $scope.addVote = function($event) {
+        var id = $event.path[2].id.split('-')[1];
+        $http.post(`/addVote/${id}`).then(function(result) {
+            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+        });
+    };
+    $scope.removeVote = function($event) {
+        var id = $event.path[2].id.split('-')[1];
+        $http.post(`/removeVote/${id}`).then(function(result) {
+            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+        });
+    };
+});
+
+
+
 
 linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $uibModal, $rootScope) {
     $scope.load = function() {
