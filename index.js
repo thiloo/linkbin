@@ -7,12 +7,12 @@ var express = require('express'),
     csrf = require('csurf'),
     csrfProtection = csrf({cookie: true}),
     bodyParser = require('body-parser'),
+    parseForm = bodyParser.urlencoded({ extended: false }),
     db = require('./db'),
     duplicate = require('./modules/duplicate_check');
 
 require('events').EventEmitter.prototype._maxListeners = 100;
 
-app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(cookieParser());
@@ -20,8 +20,13 @@ app.use(cookieSession({
     secret: 'secret',
     maxAge: 1000 * 60 * 60 * 24 * 14
 }));
+app.use(csrfProtection);
+app.use(function(req, res, next) {
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    return next();
+});
 
-app.get('/homepage', function(req, res) {
+app.get('/homepage', csrfProtection, function(req, res) {
     db.getLinksDetails().then(function(result) {
         res.json({success: true, file: result.rows});
     }).catch(function(err) {
@@ -173,7 +178,7 @@ app.get('/comments/:username', function(req,res) {
     });
 });
 
-app.post('/user/register', csrfProtection, function(req, res) {
+app.post('/user/register', function(req, res) {
     var user = req.body,
         hash = db.hashPassword(user.password);
 
