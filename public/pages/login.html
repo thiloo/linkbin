@@ -10,6 +10,7 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-7">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <input type="text" class="form-control" placeholder="Username" ng-model="user.username" ng-required="true"/>
                     </div>
                 </div>

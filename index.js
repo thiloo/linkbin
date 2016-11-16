@@ -1,7 +1,7 @@
 var express = require('express'),
     app = express(),
     scrape = require('./modules/scraper'),
-    url = require("url"),
+    url = require('url'),
     cookieParser = require('cookie-parser'),
     cookieSession = require('cookie-session'),
     csrf = require('csurf'),
@@ -12,7 +12,6 @@ var express = require('express'),
 
 require('events').EventEmitter.prototype._maxListeners = 100;
 
-app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(cookieParser());
@@ -20,8 +19,13 @@ app.use(cookieSession({
     secret: 'secret',
     maxAge: 1000 * 60 * 60 * 24 * 14
 }));
+app.use(csrfProtection);
+app.use(function(req, res, next) {
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    return next();
+});
 
-app.get('/homepage', function(req, res) {
+app.get('/homepage', csrfProtection, function(req, res) {
     db.getLinksDetails().then(function(result) {
         var links = result.rows;
         var newLinks = links.map(function(link) {
@@ -190,12 +194,11 @@ app.post('/user/register', function(req, res) {
     var user = req.body,
         hash = db.hashPassword(user.password);
 
-    db.createUser(user.user_name, hash, csrfProtection).then(function(result) {
+    db.createUser(user.user_name, hash).then(function(result) {
         req.session.username = result.rows[0].username;
         res.json({success: true, file: result.rows});
     }).catch(function(err) {
-        console.log(err);
-        res.json({success:false});
+        res.json({success:false, error: err});
     });
 });
 

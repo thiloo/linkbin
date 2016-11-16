@@ -14,7 +14,7 @@
             <div class="col-md-1">
                 <img class="picture hidden-sm hidden-xs" src="{{link.picture_url}}" />
             </div>
-            <div class="fpLinkContentContainer col-md-9 col-xs-10">
+            <div class="fpLinkContentContainer col-md-9 col-sm-10 col-xs-10">
                 <div class="row">
                     <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-xs-10" ng-if="link.link_headline.length <= 80">{{link.link_headline}}</a>
                     <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-xs-10" ng-if="link.link_headline.length > 80">{{link.link_headline | limitTo: 80}}...</a>

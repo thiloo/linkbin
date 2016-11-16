@@ -350,11 +350,15 @@ body {
   margin-top: 3px;
 }
 
-
 .reply-btn-text {
     position: relative;
     bottom: 10px;
     left:5%;
+}
+
+.tagline {
+    margin: 0;
+    padding-top: 15px;
 }
 
 .no-favorites {
