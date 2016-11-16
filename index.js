@@ -1,7 +1,7 @@
 var express = require('express'),
     app = express(),
     scrape = require('./modules/scraper'),
-    url = require("url"),
+    url = require('url'),
     cookieParser = require('cookie-parser'),
     cookieSession = require('cookie-session'),
     csrf = require('csurf'),
@@ -173,16 +173,15 @@ app.get('/comments/:username', function(req,res) {
     });
 });
 
-app.post('/user/register', function(req, res) {
+app.post('/user/register', csrfProtection, function(req, res) {
     var user = req.body,
         hash = db.hashPassword(user.password);
 
-    db.createUser(user.user_name, hash, csrfProtection).then(function(result) {
+    db.createUser(user.user_name, hash).then(function(result) {
         req.session.username = result.rows[0].username;
         res.json({success: true, file: result.rows});
     }).catch(function(err) {
-        console.log(err);
-        res.json({success:false});
+        res.json({success:false, error: err});
     });
 });
 
