@@ -3,7 +3,7 @@
         <div class="spLinkContainer col-md-12" id="link-{{link.id}}">
             <div class="spVoteCountContainer col-md-1 col-sm-2 col-xs-2" ng-switch on="link.voted">
                 <img class="spUpVote" src="/media/star.png" ng-switch-default ng-click="addVote($event); link.voted= true; link.votes = link.votes + 1" />
-                <img class="spUpVote" src="/media/stared.png" ng-switch-when="true" ng-click="addVote($event); link.voted= false; link.votes = link.votes - 1" />
+                <img class="spUpVote" src="/media/stared.png" ng-switch-when="true" ng-click="removeVote($event); link.voted= false; link.votes = link.votes - 1" />
                 <p class="spVoteCount">{{link.votes}}</p>
             </div>
             <div class="spPictureContainer col-md-2">

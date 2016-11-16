@@ -27,5 +27,5 @@ linkbinApp.config(function($routeProvider) {
         .when('/comments/:username', {
             templateUrl: 'pages/comments.html',
             controller: 'userComments'
-        })
+        });
 });
