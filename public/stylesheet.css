@@ -356,3 +356,10 @@ body {
     bottom: 10px;
     left:5%;
 }
+
+.no-favorites {
+    position: relative;
+    color: red;
+    text-align: center;
+    font-size: 26px;
+}
