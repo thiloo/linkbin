@@ -113,6 +113,10 @@ linkbinApp.controller('favorites', function($scope, $http, $location, $rootScope
     $scope.load = function() {
         $http.get('/favorites').then(function(content) {
             var links = content.data.file;
+            console.log(content.data);
+            if(content.data.success===false) {
+                $scope.noFavorites = true;
+            }
             if($rootScope.log === true) {
                 var votes = $rootScope.userVotes;
                 links.forEach(function(link) {
@@ -235,9 +239,14 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
         });
     };
     $scope.submitComment = function() {
+        if($rootScope.log===false) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'pages/login.html',
+                controller: 'register'
+            });
+        }
         var comment = $scope.comment;
-        console.log(comment);
-        if(!comment) {
+        if(!comment && $rootScope.log===true) {
             alert ('Please enter text');
         }
 
@@ -247,16 +256,8 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
             'linkId': linkId
         };
         $http.post('/insertNormalComment', obj).then(function(content) {
-            if(!content.data.success) {
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'pages/login.html',
-                    controller: 'register'
-                });
-            }
-            else {
                 $scope.comments.unshift(content.data.file);
                 $scope.comment = '';
-            }
         });
     };
 });
@@ -326,7 +327,7 @@ $http.get(`/comments/${username}`).then(function(content) {
     //         return vote === link.id;
     //     });
 
-})
+});
 
 
 });

@@ -1,5 +1,7 @@
 <div
  class="container-fluid fpListContainer">
+ <div ng-show="noFavorites" class="no-favorites">No favorites yet, start staring!</div>
+
     <div ng-repeat="link in links" id="link-{{link.id}}" class="row fpLinkContainer" >
         <div class="col-md-12">
             <div class="fpVoteCountContainer col-md-1 col-xs-1 col-sd-1" ng-switch on="link.voted">

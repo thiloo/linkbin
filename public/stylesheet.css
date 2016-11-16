@@ -350,7 +350,6 @@ body {
   margin-top: 3px;
 }
 
-
 .reply-btn-text {
     position: relative;
     bottom: 10px;
@@ -360,4 +359,11 @@ body {
 .tagline {
     margin: 0;
     padding-top: 15px;
+}
+
+.no-favorites {
+    position: relative;
+    color: red;
+    text-align: center;
+    font-size: 26px;
 }
