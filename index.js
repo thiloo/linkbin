@@ -56,19 +56,17 @@ app.get('/link/:id', function(req, res) {
 
 app.post('/insertLinkData', function(req, res) {
     if (!req.session.username) {
-        console.log('no');
         res.json({success: false});
     } else {
         var linkUrl = req.body.url,
-        description = req.body.description,
-        username = req.session.username,
-        source = url.parse(linkUrl).hostname || '',
-        altImg = 'media/default.jpg';
+            description = req.body.description,
+            username = req.session.username,
+            source = url.parse(linkUrl).hostname || '',
+            altImg = 'media/default.jpg';
         console.log(linkUrl);
         scrape.scraper(linkUrl).then(function(scraped) {
-            console.log(scraped);
+            console.log('scraped stuff',scraped);
             db.insertLinkDetails(linkUrl, scraped.title || linkUrl, description, username, source, scraped.imageUrl || altImg).then(function(result) {
-                console.log(result);
                 res.json({success: true, file: result});
             }).catch(function(err) {
                 if (err) {
@@ -80,7 +78,6 @@ app.post('/insertLinkData', function(req, res) {
 });
 
 app.post('/insertNormalComment', function(req, res) {
-    console.log(req.session.username);
     if (!req.session.username) {
         res.json({success: false});
     } else {
@@ -171,7 +168,6 @@ app.get('/user/:username', function(req, res) {
 app.get('/favorites', function(req, res) {
     var username = req.session.username;
     db.getFavorites(username).then(function(result) {
-        console.log(result.rows);
         res.json({success: true, file: result.rows});
     }).catch(function(err) {
         if (err) {
@@ -197,11 +193,8 @@ app.post('/user/register', function(req, res) {
 
 app.post('/api/login', function(req, res) {
     var login = req.body;
-    console.log('login');
-    console.log(login);
 
     db.getUser(login.user_name).then(function(result) {
-        console.log(result.rows);
         if (result.rows.length === 0) {
             res.json({
                 success:false
