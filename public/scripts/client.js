@@ -344,14 +344,20 @@ linkbinApp.controller('addLink',['$scope', '$http', '$uibModalInstance','$uibMod
         };
         $http(config).then(function(response){
             if(!response.data.success) {
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'pages/login.html',
-                    controller: 'register'
-                });
+                if(response.data.duplicate) {
+                    $scope.error = true;
+                    $scope.errorMessage = response.data.error;
+                    return;
+                } else {
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'pages/login.html',
+                        controller: 'register'
+                    });
+                }
             } else {
+                $uibModalInstance.close('close');
                 $location.path(`/link/${response.data.file.rows[0].id}`);
             }
         });
-        $uibModalInstance.close('close');
     };
 }]);

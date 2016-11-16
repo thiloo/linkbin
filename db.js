@@ -214,6 +214,14 @@ exports.getAllcommentsOfUser = function(username) {
     });
 };
 
+exports.checkForDuplicateUrl = function(url) {
+    return getFromDb('SELECT * FROM links WHERE url = $1', [url]).then(function(result) {
+        return result;
+    }).catch(function(err){
+        return err;
+    });
+};
+
 function getFromDb(str, params) {
     return new Promise(function(resolve, reject) {
         pool.connect(function(err, client, done) {

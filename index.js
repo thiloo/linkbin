@@ -7,7 +7,8 @@ var express = require('express'),
     csrf = require('csurf'),
     csrfProtection = csrf({cookie: true}),
     bodyParser = require('body-parser'),
-    db = require('./db');
+    db = require('./db'),
+    duplicate = require('./modules/duplicate_check');
 
 require('events').EventEmitter.prototype._maxListeners = 100;
 
@@ -53,12 +54,17 @@ app.post('/insertLinkData', function(req, res) {
             source = url.parse(linkUrl).hostname || '',
             altImg = 'media/default.jpg';
 
-        scrape.scraper(linkUrl).then(function(scraped) {
-            db.insertLinkDetails(linkUrl, scraped.title || linkUrl, description, username, source, scraped.imageUrl || altImg).then(function(result) {
-                res.json({success: true, file: result});
-            }).catch(function(err) {
-                console.log(err);
+        duplicate.check(linkUrl).then(function(cleanUrl) {
+            scrape.scraper(cleanUrl).then(function(scraped) {
+                db.insertLinkDetails(cleanUrl, scraped.title || cleanUrl, description, username, source, scraped.imageUrl || altImg).then(function(result) {
+                    res.json({success: true, file: result});
+                }).catch(function(err) {
+                    console.log(err);
+                });
             });
+        })
+        .catch(function(err) {
+            res.json({success: false, duplicate: true, error: err});
         });
     }
 });
