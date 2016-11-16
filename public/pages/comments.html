@@ -1,0 +1,8 @@
+<div ng-controller="userComments" class="user-comments-container">
+
+    <div ng-repeat="comment in userComments" class="commentContainer" id="comment-{{comment.id}}">
+        <p class="commentText">{{comment.comment}}</p>
+        <p class="commentUsername">{{comment.username}}</p> | posted <time am-time-ago="comment.created_at"></time>
+        <a href="#/link/{{comment.link_id}}" class="commentText">Go to link</a>
+    </div>
+</div>
