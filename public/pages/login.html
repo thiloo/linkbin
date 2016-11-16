@@ -1,6 +1,6 @@
 <div class="registerPopUp">
-    <div class="text-center">
-        <h2 class="popupHeadline">Login / Signup</h2>
+    <div class="container">
+        <h2 class="popupHeadline col-md-offset-2">Login / Signup</h2>
         <div>
             <form class="form-horizontal">
 
@@ -9,12 +9,12 @@
                 <div ng-show="errorInRegister" class="wrongLogin">This user already exists, pick another one</div>
 
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
+                    <div class="col-md-offset-2 col-md-7">
                         <input type="text" class="form-control" placeholder="Username" ng-model="user.username" ng-required="true"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
+                    <div class="col-md-offset-2 col-md-7">
                         <input type="password" class="form-control" placeholder="Password" ng-model="user.password" ng-required="true"/>
                     </div>
                 </div>

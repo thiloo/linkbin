@@ -23,5 +23,5 @@ linkbinApp.config(function($routeProvider) {
         .when('/favorites', {
             templateUrl: 'pages/home.html',
             controller: 'favorites'
-        })
+        });
 });

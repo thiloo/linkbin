@@ -264,7 +264,7 @@ body {
 .registerPopUp {
     position:relative;
     height: 250px;
-    width: 500px;
+    max-width: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -280,7 +280,9 @@ body {
 .uploadContainer {
     height: 320px;
     width: 500px;
-    padding-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .addLinkInput {
@@ -288,7 +290,7 @@ body {
 }
 
 .popupHeadline {
-    position:relative;
+    /*position:relative;*/
     left: 22%;
     margin: 15px;
     text-align: center;

@@ -61,16 +61,15 @@ linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
     };
     $scope.load();
     $scope.addVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
+        var id = $event.path[3].id.split('-')[1];
         $http.post(`/addVote/${id}`).then(function(result) {
-            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
-
+            $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
     $scope.removeVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
+        var id = $event.path[3].id.split('-')[1];
         $http.post(`/removeVote/${id}`).then(function(result) {
-            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+            $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
 });
@@ -80,7 +79,6 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
         var url = $location.path();
         var username = url.split('/')[2];
         $http.get(`/user/${username}`).then(function(content) {
-            console.log(content);
             var links = content.data.file;
             if($rootScope.log === true) {
                 var votes = $rootScope.userVotes;
@@ -97,15 +95,15 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
     };
     $scope.load();
     $scope.addVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
+        var id = $event.path[3].id.split('-')[1];
         $http.post(`/addVote/${id}`).then(function(result) {
-            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+            $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
     $scope.removeVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
+        var id = $event.path[3].id.split('-')[1];
         $http.post(`/removeVote/${id}`).then(function(result) {
-            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+            $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
 });
@@ -115,7 +113,6 @@ linkbinApp.controller('favorites', function($scope, $http, $location, $rootScope
     $scope.load = function() {
         $http.get('/favorites').then(function(content) {
             var links = content.data.file;
-            console.log(links);
             if($rootScope.log === true) {
                 var votes = $rootScope.userVotes;
                 links.forEach(function(link) {
@@ -143,9 +140,6 @@ linkbinApp.controller('favorites', function($scope, $http, $location, $rootScope
         });
     };
 });
-
-
-
 
 linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $uibModal, $rootScope) {
     $scope.load = function() {
@@ -167,17 +161,15 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
     $scope.addVote = function($event) {
         var id = $event.path[2].id.split('-')[1];
         $http.post(`/addVote/${id}`).then(function(result) {
-            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
-
+            $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
     $scope.removeVote = function($event) {
         var id = $event.path[2].id.split('-')[1];
         $http.post(`/removeVote/${id}`).then(function(result) {
-            localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
+            $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
-
 
     $scope.getReplies = function($event) {
         var parentId = parseInt($event.path[2].id.split('-')[1]);
@@ -206,9 +198,9 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
                 controller: 'register'
             });
         }
-    }
-    $scope.submitReply = function($event,data) {
+    };
 
+    $scope.submitReply = function($event,data) {
         var text = $event.target.parentNode.querySelector('textarea');
         var comment = text.value;
         var parentId = parseInt($event.path[2].id.split('-')[1]);
@@ -264,14 +256,11 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
             }
         });
     };
-    // }
-
 });
 
 linkbinApp.controller('register', function($scope, $http, $rootScope, $uibModalInstance) {
     $scope.user = {username: '', password: ''};
     $scope.message = '';
-
     $scope.login = function(){
         var config = {
             method: 'POST',
@@ -294,7 +283,6 @@ linkbinApp.controller('register', function($scope, $http, $rootScope, $uibModalI
             }
         });
     };
-
 
     $scope.register = function(){
         var config = {
