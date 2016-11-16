@@ -1,10 +1,9 @@
 
-linkbinApp.controller('RegisterCtrl', function($scope, $http, $cookies) {
+linkbinApp.controller('RegisterCtrl', function($scope, $http) {
     $scope.user = {username: '', password: ''};
     $scope.message = '';
     // $scope.buttonText="register";
     $scope.register = function(){
-        $cookies.put('myFavorite', 'oatmeal');
 
         console.log($scope.user);
         var config = {
@@ -34,9 +33,26 @@ linkbinApp.controller('RegisterCtrl', function($scope, $http, $cookies) {
         };
         $http(config).success(function(response){
             console.log('login works');
-            var value = $cookies.get("key");
             console.log(value);
         });
     };
+
+    $scope.FBlogin = function (){
+        
+        FB.login(function(response) {
+            if (response.authResponse) {
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me', function(response) {
+                    console.log('Good to see you, ' + response.name + '.');
+                });
+            } else {
+                console.log('User cancelled login or did not fully authorize.');
+            }
+        });
+
+    };
+
+
+
 
 });

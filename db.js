@@ -37,6 +37,40 @@ var bcrypt = require('bcrypt');
 //     });
 // };
 
+exports.hot_score = function() {
+    return getFromDb('SELECT * FROM links ORDER BY ranking(comments + votes, created_at::timestamp) DESC LIMIT 30').then(function(result) {
+
+        // SELECT * FROM links
+        //   ORDER BY ranking(
+        //     comments + votes,
+        //     created_at::timestamp
+        //   ) DESC LIMIT 30;
+        // // var abs = Math.abs(result);
+        // // var max = Math.max(abs);
+        // // var log = Math.log10(max);
+        // if votes
+        console.log(result);
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+
+exports.top_score = function() {
+    return getFromDb('SELECT * FROM links ORDER BY ranking (log(max(abs(votes),1)), created_at::timestamp) DESC LIMIT 30').then(function(result) {
+        console.log(result);
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
+
+
 exports.checkPassword = function(requestedPassword, listedPassword) {
     return new Promise(function(resolve, reject) {
         bcrypt.compare(requestedPassword, listedPassword, function(err, doesMatch) {

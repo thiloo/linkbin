@@ -50,6 +50,9 @@ app.use(express.static('public'));
 
 
 app.get('/homepage', function(req, res) {
+    db.hot_score().then(function(result){
+        console.log(result);
+    });
 
     db.linksDetails().then(function(result) {
         res.json({
@@ -102,7 +105,9 @@ app.post('/api/user', function(req, res){
 app.post('/api/login', function(req, res){
     var login = req.body;
     console.log(login.password);
-
+    if (login.user_name == " ") {
+        alert("please enter a login name");
+    }
     db.getUser(login.user_name).then(function(result){
         console.log(result);
         db.checkPassword(login.password, result.password).then(function(answer){
