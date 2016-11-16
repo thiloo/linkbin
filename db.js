@@ -247,6 +247,15 @@ exports.getFavorites = function(username) {
     });
 };
 
+exports.getAllcommentsOfUser = function(username) {
+    return getFromDb('SELECT * FROM comments WHERE username = $1 ORDER BY created_at DESC LIMIT 60', [username]).then(function(result) {
+        return result;
+    }).catch(function(err) {
+        if(err) {
+            console.log(err);
+        }
+    });
+};
 
 function getFromDb(str, params) {
     return new Promise(function(resolve, reject) {

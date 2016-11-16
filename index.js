@@ -176,6 +176,17 @@ app.get('/favorites', function(req, res) {
     });
 });
 
+app.get('/comments/:username', function(req,res) {
+    var username = req.params.username;
+    console.log(username);
+    db.getAllcommentsOfUser(username).then(function(result) {
+        console.log(result.rows);
+        res.json({success: true, file: result.rows});
+
+    })
+
+})
+
 app.post('/user/register', function(req, res) {
     var user = req.body;
     var hash = db.hashPassword(user.password);

@@ -178,11 +178,13 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
                 var place = i;
                 if($scope.comments[i].replies) {
                     $scope.comments[i].replies = "";
+                    $scope.comments[i].closeReplies = false;
                     break;
                 }
                 else {
                     $http.get(`/getReplies/${parentId}`).then(function(content) {
                         $scope.comments[place].replies = content.data.file;
+                        $scope.comments[place].closeReplies = true;
                     }).catch(function(error) {
                         console.log(error);
                     });
@@ -201,8 +203,17 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
     };
 
     $scope.submitReply = function($event,data) {
+        if($rootScope.log===false) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'pages/login.html',
+                controller: 'register'
+            });
+        }
         var text = $event.target.parentNode.querySelector('textarea');
         var comment = text.value;
+        if(!comment) {
+            alert ('Please enter text')
+        }
         var parentId = parseInt($event.path[2].id.split('-')[1]);
         var linkId = $routeParams.id;
         var obj = {
@@ -212,25 +223,12 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
         };
         text.value = '';
         $http.post('/insertReplyComment', obj).then(function(content) {
-            if(!content.data.success) {
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'pages/login.html',
-                    controller: 'register'
-                });
-            }
-            else {
-                for (var i = 0; i < $scope.comments.length; i++) {
-                    if ($scope.comments[i].id === parentId) {
-                        if($scope.comments[i].replies) {
-                            $scope.comments[i].replies.unshift(content.data.file[0]);
-                            $scope.comments[i].num_of_replies +=1;
-                            break;
-                        }
-                        else {
-                            $scope.comments[i].replies=content.data.file[0];
-                            $scope.comments[i].num_of_replies +=1;
-                            break;
-                        }
+            for (var i = 0; i < $scope.comments.length; i++) {
+                if ($scope.comments[i].id === parentId) {
+                    $scope.comments[i].num_of_replies +=1;
+                    if($scope.comments[i].replies) {
+                        $scope.comments[i].replies.unshift(content.data.file[0]);
+                        break;
                     }
                 }
             }
@@ -238,10 +236,15 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
     };
     $scope.submitComment = function() {
         var comment = $scope.comment;
+        console.log(comment);
+        if(!comment) {
+            alert ('Please enter text');
+        }
+
         var linkId = $routeParams.id;
         var obj = {
             'comment': comment,
-            'linkId': linkId,
+            'linkId': linkId
         };
         $http.post('/insertNormalComment', obj).then(function(content) {
             if(!content.data.success) {
@@ -306,6 +309,26 @@ linkbinApp.controller('register', function($scope, $http, $rootScope, $uibModalI
             }
         });
     };
+});
+
+linkbinApp.controller('userComments', function($scope, $http, $routeParams, $location, $rootScope) {
+
+var url = $location.path();
+var username = url.split('/')[2];
+
+$http.get(`/comments/${username}`).then(function(content) {
+
+    $scope.userComments = content.data.file;
+    // var link = content.data.file.link[0];
+    // if($rootScope.log === true) {
+    //     var votes = $rootScope.userVotes;
+    //     link.voted = votes.some(function(vote) {
+    //         return vote === link.id;
+    //     });
+
+})
+
+
 });
 
 
