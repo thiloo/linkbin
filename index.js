@@ -7,7 +7,6 @@ var express = require('express'),
     csrf = require('csurf'),
     csrfProtection = csrf({cookie: true}),
     bodyParser = require('body-parser'),
-    parseForm = bodyParser.urlencoded({ extended: false }),
     db = require('./db'),
     duplicate = require('./modules/duplicate_check');
 
