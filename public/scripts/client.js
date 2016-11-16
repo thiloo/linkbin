@@ -113,6 +113,10 @@ linkbinApp.controller('favorites', function($scope, $http, $location, $rootScope
     $scope.load = function() {
         $http.get('/favorites').then(function(content) {
             var links = content.data.file;
+            console.log(content.data);
+            if(content.data.success===false) {
+                $scope.noFavorites = true;
+            }
             if($rootScope.log === true) {
                 var votes = $rootScope.userVotes;
                 links.forEach(function(link) {

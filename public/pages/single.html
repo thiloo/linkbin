@@ -21,7 +21,6 @@
                     <a href="#/user/{{link.username}}" class="spText">{{link.username}}</a>
                     <time class="spText" am-time-ago="link.created_at"></time>
                 </div>
-
             </div>
         </div>
     </div>
@@ -47,8 +46,6 @@
             <textarea class="postReplyTextArea"></textarea>
             <button ng-click="submitReply($event)">submit</button>
         </div>
-
-
         <div class="replyContainer">
             <div ng-if="comment.num_of_replies>0 && !comment.closeReplies" class="arrow-down"> </div>
             <div ng-if="comment.closeReplies" class="arrow-up"> </div>

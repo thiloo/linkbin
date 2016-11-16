@@ -30,7 +30,16 @@ app.use(cookieSession({
 
 app.get('/homepage', function(req, res) {
     db.getLinksDetails().then(function(result) {
-        res.json({success: true, file: result.rows});
+        var links = result.rows;
+        var newLinks = links.map(function(link) {
+            link.score =  link.num_of_comments + link.votes - (new Date() - link.created_at)/1000/60/60;
+            return link;
+        }).sort(function(a,b) {
+            return b.score - a.score;
+        });
+
+        console.log(newLinks);
+        res.json({success: true, file: newLinks});
     }).catch(function(err) {
         if (err) {
             console.log(err);
@@ -168,10 +177,12 @@ app.get('/user/:username', function(req, res) {
 app.get('/favorites', function(req, res) {
     var username = req.session.username;
     db.getFavorites(username).then(function(result) {
+        console.log(result);
         res.json({success: true, file: result.rows});
     }).catch(function(err) {
         if (err) {
             console.log(err);
+            res.json({success:false})
         }
     });
 });
