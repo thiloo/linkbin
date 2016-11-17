@@ -1,24 +1,23 @@
-<div class="uploadContainer">
-    <div class="container">
+<div class="uploadContainer"><br /><br />
+    <div class="container-fluid col-md-12">
         <div class="modal-headline col-md-offset-1">
             <h2 class="popupHeadline">Add a link</h2>
         </div>
         <div class="">
             <div ng-show="error" class="wrongLogin">{{errorMessage}}</div>
-            <div class="col-md-offset-2">
-                <form class="" ng-submit="add()">
-                    <div class="row">
-                        <div class="">
-                            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <div class="">
+                <form class="form-horizontal" ng-submit="add()">
+                    <div class="form-group">
+                        <div class="col-sm-10 col-xs-10">
                             <input type="text" ng-model="link.url" name="url" placeholder="URL" class="form-control addLinkInput" required />
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="">
+                    <div class="form-group">
+                        <div class="col-sm-10 col-xs-10">
                             <textarea type="text" ng-model="link.description" name="description" placeholder="Description" class="form-control addLinkInput" />
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="form-group">
                         <div class="">
                            <input type="submit" value="Submit" class="btn blueButton" />
                         </div>

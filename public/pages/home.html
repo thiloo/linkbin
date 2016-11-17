@@ -4,9 +4,9 @@
     <div ng-repeat="link in links" id="link-{{link.id}}" class="row fpLinkContainer" >
         <div class="col-md-12">
             <div class="fpVoteCountContainer col-md-1 col-xs-1 col-sd-1">
-                <img class="fpUpVote" src="/media/star.png" ng-if="log == false"/>
-                <img class="fpUpVote" src="/media/stared.png" ng-if="log == true && link.voted == true" ng-click="removeVote($event); link.voted = false; link.votes = link.votes - 1" />
-                <img class="fpUpVote" src="/media/star.png" ng-if="log == true && link.voted == false" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" />
+                <img class="fpUpVote hover" src="/media/star.png" ng-if="log == false"/>
+                <img class="fpUpVote hover" src="/media/stared.png" ng-if="log == true && link.voted == true" ng-click="removeVote($event); link.voted = false; link.votes = link.votes - 1" />
+                <img class="fpUpVote hover" src="/media/star.png" ng-if="log == true && link.voted == false" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" />
                 <p class="fpVoteCount">{{link.votes}}</p>
             </div>
             <div class="col-md-1 col-sm-2">
