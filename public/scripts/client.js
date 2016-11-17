@@ -177,10 +177,16 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
     };
 
     $scope.getReplies = function($event) {
+        // console.log($event.target)
         var parentId = parseInt($event.path[2].id.split('-')[1]);
+        // var parentId = $event.target.closest("div .commentContainer").id.split('-')[1];
+
+        console.log(parentId);
         for (var i = 0; i < $scope.comments.length; i++) {
+            console.log('hey');
             if ($scope.comments[i].id === parentId) {
                 var place = i;
+                console.log('place');
                 if($scope.comments[i].replies) {
                     $scope.comments[i].replies = "";
                     $scope.comments[i].closeReplies = false;
@@ -217,27 +223,30 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
         var text = $event.target.parentNode.querySelector('textarea');
         var comment = text.value;
         if(!comment) {
-            alert ('Please enter text')
+            $scope.noText = true;
         }
-        var parentId = parseInt($event.path[2].id.split('-')[1]);
-        var linkId = $routeParams.id;
-        var obj = {
-            'comment': comment,
-            'linkId': linkId,
-            'parentId':parentId
-        };
-        text.value = '';
-        $http.post('/insertReplyComment', obj).then(function(content) {
-            for (var i = 0; i < $scope.comments.length; i++) {
-                if ($scope.comments[i].id === parentId) {
-                    $scope.comments[i].num_of_replies +=1;
-                    if($scope.comments[i].replies) {
-                        $scope.comments[i].replies.unshift(content.data.file[0]);
-                        break;
+        else {
+            $scope.noText = false;
+            var parentId = parseInt($event.path[2].id.split('-')[1]);
+            var linkId = $routeParams.id;
+            var obj = {
+                'comment': comment,
+                'linkId': linkId,
+                'parentId':parentId
+            };
+            text.value = '';
+            $http.post('/insertReplyComment', obj).then(function(content) {
+                for (var i = 0; i < $scope.comments.length; i++) {
+                    if ($scope.comments[i].id === parentId) {
+                        $scope.comments[i].num_of_replies +=1;
+                        if($scope.comments[i].replies) {
+                            $scope.comments[i].replies.unshift(content.data.file[0]);
+                            break;
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     };
     $scope.submitComment = function() {
         if($rootScope.log===false) {
@@ -248,18 +257,20 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
         }
         var comment = $scope.comment;
         if(!comment && $rootScope.log===true) {
-            alert ('Please enter text');
+            $scope.noText = true;
         }
-
-        var linkId = $routeParams.id;
-        var obj = {
-            'comment': comment,
-            'linkId': linkId
-        };
-        $http.post('/insertNormalComment', obj).then(function(content) {
+        else {
+            $scope.noText = false;
+            var linkId = $routeParams.id;
+            var obj = {
+                'comment': comment,
+                'linkId': linkId
+            };
+            $http.post('/insertNormalComment', obj).then(function(content) {
                 $scope.comments.unshift(content.data.file);
                 $scope.comment = '';
-        });
+            });
+        }
     };
 });
 
@@ -315,20 +326,20 @@ linkbinApp.controller('register', function($scope, $http, $rootScope, $uibModalI
 
 linkbinApp.controller('userComments', function($scope, $http, $routeParams, $location, $rootScope) {
 
-var url = $location.path();
-var username = url.split('/')[2];
+    var url = $location.path();
+    var username = url.split('/')[2];
 
-$http.get(`/comments/${username}`).then(function(content) {
+    $http.get(`/comments/${username}`).then(function(content) {
 
-    $scope.userComments = content.data.file;
-    // var link = content.data.file.link[0];
-    // if($rootScope.log === true) {
-    //     var votes = $rootScope.userVotes;
-    //     link.voted = votes.some(function(vote) {
-    //         return vote === link.id;
-    //     });
+        $scope.userComments = content.data.file;
+        // var link = content.data.file.link[0];
+        // if($rootScope.log === true) {
+        //     var votes = $rootScope.userVotes;
+        //     link.voted = votes.some(function(vote) {
+        //         return vote === link.id;
+        //     });
 
-});
+    });
 
 
 });
