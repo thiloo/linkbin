@@ -50,7 +50,7 @@
             <div ng-if="comment.num_of_replies>0 && !comment.closeReplies" class="arrow-down"> </div>
             <div ng-if="comment.closeReplies" class="arrow-up"> </div>
 
-            <button class="getRepliesButton" ng-click="getReplies($event)">
+            <button ng-if="comment.num_of_replies>0" class="getRepliesButton" ng-click="getReplies($event)">
                 {{ comment.num_of_replies === 1 ? comment.num_of_replies + ' reply' : comment.num_of_replies + ' replies' }}
             </button>
             <div class="replies">
