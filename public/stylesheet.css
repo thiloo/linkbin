@@ -4,19 +4,9 @@ body {
     width: 100%;
 }
 
-.fpListContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    overflow-x: : hidden;
-}
-
 .fpLinkContainer {
     min-height: 110px;
     width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
     margin-top: 10px;
     border-bottom: 2px dotted #D8D8D8;
     overflow: hidden;
@@ -199,17 +189,6 @@ body {
     color:#4990E2;
 }
 
-.headerContainer {
-    padding-right: 30px;
-    padding-left: 30px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    height: 70px;
-    /*border: 2px solid black;*/
-    background-color: #D8D8D8;
-}
-
-
 .headerButton {
     background-color: #4990E2;
     color: white;
@@ -264,10 +243,10 @@ body {
 .registerPopUp {
     height: 250px;
     max-width: 500px;
-    display: flex;
+    /*display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    text-align: center;*/
 }
 
 .text-center {

@@ -1,23 +1,21 @@
 <div
  class="container-fluid fpListContainer">
  <div ng-show="noFavorites" class="no-favorites">No favorites yet, start favoring!</div>
-
     <div ng-repeat="link in links" id="link-{{link.id}}" class="row fpLinkContainer" >
         <div class="col-md-12">
-            <div class="fpVoteCountContainer col-md-1 col-xs-1 col-sd-1" ng-switch on="link.voted">
-                <!-- <div class=""> -->
-                    <img class="fpUpVote" src="/media/stared.png" ng-click="removeVote($event); link.voted = false; link.votes = link.votes - 1" ng-switch-when="true"/>
-                    <img class="fpUpVote" src="/media/star.png" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" ng-switch-default/>
-                    <p class="fpVoteCount">{{link.votes}}</p>
-                <!-- </div> -->
+            <div class="fpVoteCountContainer col-md-1 col-xs-1 col-sd-1">
+                <img class="fpUpVote" src="/media/star.png" ng-if="log == false"/>
+                <img class="fpUpVote" src="/media/stared.png" ng-if="log == true && link.voted == true" ng-click="removeVote($event); link.voted = false; link.votes = link.votes - 1" />
+                <img class="fpUpVote" src="/media/star.png" ng-if="log == true && link.voted == false" ng-click="addVote($event); link.voted = true; link.votes = link.votes + 1" />
+                <p class="fpVoteCount">{{link.votes}}</p>
             </div>
-            <div class="col-md-1 col-sm-3">
+            <div class="col-md-1 col-sm-2">
                 <img class="picture hidden-xs" src="{{link.picture_url}}" />
             </div>
-            <div class="fpLinkContentContainer col-md-8 col-sm-8 col-xs-10">
+            <div class="fpLinkContentContainer col-md-10 col-sm-8 col-xs-10">
                 <div class="row">
-                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-sm-8 col-xs-10" ng-if="link.link_headline.length <= 80">{{link.link_headline}}</a>
-                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-sm-8 col-xs-10" ng-if="link.link_headline.length > 80">{{link.link_headline | limitTo: 80}}...</a>
+                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-sm-10 col-xs-10" ng-if="link.link_headline.length <= 80">{{link.link_headline}}</a>
+                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-sm-10 col-xs-10" ng-if="link.link_headline.length > 80">{{link.link_headline | limitTo: 80}}...</a>
                     <a href="http://{{link.source}}" class="fpLinkSource hidden-xs hidden-sm col-md-3">( {{link.source}} )</a>
                 </div>
                 <a href="#/link/{{link.id}}" class="fpLinkTitle" ng-if="link.description.length < 99">{{link.description}}</a>
