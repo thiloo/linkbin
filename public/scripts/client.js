@@ -1,4 +1,4 @@
-const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment', 'ui.bootstrap']);
+const linkbinApp = angular.module('linkbinApp', ['ngRoute', 'angularMoment', 'ui.bootstrap', 'ngAnimate']);
 
 linkbinApp.run(function($rootScope,$http) {
     $http.get('/checkLog').then(function(result) {
@@ -39,7 +39,7 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', '$ro
             $window.location.href = '/';
         });
     };
-    $scope.navbarCollapsed = true;
+    // $scope.navbarCollapsed = true;
 
 }]);
 
