@@ -120,6 +120,7 @@ app.get('/getReplies/:parentId', function(req, res) {
     var parentId = req.params.parentId;
 
     db.getReplies(parentId).then(function(result) {
+        console.log(result.rows);
         res.json({success: true, file: result.rows});
     });
 });

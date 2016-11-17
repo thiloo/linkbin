@@ -28,6 +28,7 @@
 
 
     <div class="postCommentContainer">
+        <div ng-show="noText" class="no-text">Please enter text</div>
         <div class="row" ng-hide="log===false">
             <textarea class="postCommentTextArea col-md-4 col-sm-6 col-xs-10" rows="6" ng-model="comment"></textarea><br />
         </div>
@@ -43,6 +44,7 @@
         <button ng-click="showReplyBox = !showReplyBox; reply($event)" class="reply"=>reply</button>
 
         <div ng-show="showReplyBox">
+            <div ng-show="noText" class="no-text">Please enter text</div>
 
             <textarea class="postReplyTextArea"></textarea>
             <button ng-click="submitReply($event)">submit</button>
@@ -51,7 +53,7 @@
             <div ng-if="comment.num_of_replies>0 && !comment.closeReplies" class="arrow-down"> </div>
             <div ng-if="comment.closeReplies" class="arrow-up"> </div>
 
-            <button ng-if="comment.num_of_replies>0" class="getRepliesButton" ng-click="getReplies($event)">
+            <button ng-if="comment.num_of_replies>0" class="getRepliesButton {{comment.id}}" ng-click="getReplies($event)">
                 {{ comment.num_of_replies === 1 ? comment.num_of_replies + ' reply' : comment.num_of_replies + ' replies' }}
             </button>
             <div class="replies">

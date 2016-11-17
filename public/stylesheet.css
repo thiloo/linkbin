@@ -349,3 +349,7 @@ body {
 .hover {
     cursor: pointer;
 }
+
+.no-text {
+    color: red;
+}
