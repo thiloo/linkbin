@@ -39,6 +39,7 @@ linkbinApp.controller('header',[ '$scope', '$uibModal', '$http', '$window', '$ro
             $window.location.href = '/';
         });
     };
+    $scope.navbarCollapsed = true;
 
 }]);
 

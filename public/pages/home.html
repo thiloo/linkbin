@@ -11,14 +11,14 @@
                     <p class="fpVoteCount">{{link.votes}}</p>
                 <!-- </div> -->
             </div>
-            <div class="col-md-1">
-                <img class="picture hidden-sm hidden-xs" src="{{link.picture_url}}" />
+            <div class="col-md-1 col-sm-3">
+                <img class="picture hidden-xs" src="{{link.picture_url}}" />
             </div>
-            <div class="fpLinkContentContainer col-md-9 col-sm-10 col-xs-10">
+            <div class="fpLinkContentContainer col-md-8 col-sm-8 col-xs-10">
                 <div class="row">
-                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-xs-10" ng-if="link.link_headline.length <= 80">{{link.link_headline}}</a>
-                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-xs-10" ng-if="link.link_headline.length > 80">{{link.link_headline | limitTo: 80}}...</a>
-                    <a href="http://{{link.source}}" class="fpLinkSource hidden-xs col-md-3">( {{link.source}} )</a>
+                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-sm-8 col-xs-10" ng-if="link.link_headline.length <= 80">{{link.link_headline}}</a>
+                    <a href="{{link.url}}" class="fpLinkHeadline col-md-9 col-sm-8 col-xs-10" ng-if="link.link_headline.length > 80">{{link.link_headline | limitTo: 80}}...</a>
+                    <a href="http://{{link.source}}" class="fpLinkSource hidden-xs hidden-sm col-md-3">( {{link.source}} )</a>
                 </div>
                 <a href="#/link/{{link.id}}" class="fpLinkTitle" ng-if="link.description.length < 99">{{link.description}}</a>
                 <a href="#/link/{{link.id}}" class="fpLinkTitle" ng-if="link.description.length > 99">{{link.description | limitTo : 100}}...</a>

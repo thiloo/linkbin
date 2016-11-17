@@ -34,8 +34,6 @@ app.get('/homepage', csrfProtection, function(req, res) {
         }).sort(function(a,b) {
             return b.score - a.score;
         });
-
-        console.log(newLinks);
         res.json({success: true, file: newLinks});
     }).catch(function(err) {
         console.log(err);

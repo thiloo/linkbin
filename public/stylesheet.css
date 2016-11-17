@@ -262,7 +262,6 @@ body {
 }
 
 .registerPopUp {
-    position:relative;
     height: 250px;
     max-width: 500px;
     display: flex;
