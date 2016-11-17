@@ -170,7 +170,6 @@ app.get('/favorites', function(req, res) {
     var username = req.session.username;
 
     db.getFavorites(username).then(function(result) {
-        console.log(result);
         res.json({success: true, file: result.rows});
     }).catch(function(err) {
         if (err) {
