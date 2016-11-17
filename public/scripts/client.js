@@ -47,7 +47,7 @@ linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
     $scope.load = function() {
         $http.get('/homepage').then(function(content) {
             var links = content.data.file;
-            if($rootScope.log === true) {
+            if($rootScope.log === true && $rootScope.userVotes !== undefined) {
                 var votes = $rootScope.userVotes;
                 links.forEach(function(link) {
                     link.voted = votes.some(function(vote) {
@@ -62,13 +62,13 @@ linkbinApp.controller('frontPageListView', function($scope, $http, $rootScope) {
     };
     $scope.load();
     $scope.addVote = function($event) {
-        var id = $event.path[3].id.split('-')[1];
+        var id = $event.target.closest("div .fpLinkContainer").id.split('-')[1];
         $http.post(`/addVote/${id}`).then(function(result) {
             $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
     $scope.removeVote = function($event) {
-        var id = $event.path[3].id.split('-')[1];
+        var id = $event.target.closest("div .fpLinkContainer").id.split('-')[1];
         $http.post(`/removeVote/${id}`).then(function(result) {
             $rootScope.userVotes = result.data.file[0].voted_links;
         });
@@ -96,13 +96,13 @@ linkbinApp.controller('userView', function($scope, $http, $location, $rootScope)
     };
     $scope.load();
     $scope.addVote = function($event) {
-        var id = $event.path[3].id.split('-')[1];
+        var id = $event.target.closest("div .fpLinkContainer").id.split('-')[1];
         $http.post(`/addVote/${id}`).then(function(result) {
             $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
     $scope.removeVote = function($event) {
-        var id = $event.path[3].id.split('-')[1];
+        var id = $event.target.closest("div .fpLinkContainer").id.split('-')[1];
         $http.post(`/removeVote/${id}`).then(function(result) {
             $rootScope.userVotes = result.data.file[0].voted_links;
         });
@@ -114,7 +114,6 @@ linkbinApp.controller('favorites', function($scope, $http, $location, $rootScope
     $scope.load = function() {
         $http.get('/favorites').then(function(content) {
             var links = content.data.file;
-            console.log(content.data);
             if(content.data.success===false) {
                 $scope.noFavorites = true;
             }
@@ -133,13 +132,13 @@ linkbinApp.controller('favorites', function($scope, $http, $location, $rootScope
     };
     $scope.load();
     $scope.addVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
+        var id = $event.target.closest("div .fpLinkContainer").id.split('-')[1];
         $http.post(`/addVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
         });
     };
     $scope.removeVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
+        var id = $event.target.closest("div .fpLinkContainer").id.split('-')[1];
         $http.post(`/removeVote/${id}`).then(function(result) {
             localStorage.setItem('userVotes', JSON.stringify([result.data.file[0]]));
         });
@@ -164,20 +163,20 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
     };
     $scope.load();
     $scope.addVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
+        var id = $event.target.closest("div .spLinkContainer");
         $http.post(`/addVote/${id}`).then(function(result) {
             $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
     $scope.removeVote = function($event) {
-        var id = $event.path[2].id.split('-')[1];
+        var id = $event.target.closest("div .spLinkContainer");
         $http.post(`/removeVote/${id}`).then(function(result) {
             $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
 
     $scope.getReplies = function($event) {
-        var parentId = parseInt($event.path[2].id.split('-')[1]);
+        var parentId = parseInt($event.target.closest("div .commentContainer").id.split('-')[1]);
         for (var i = 0; i < $scope.comments.length; i++) {
             if ($scope.comments[i].id === parentId) {
                 var place = i;
@@ -257,8 +256,8 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
             'linkId': linkId
         };
         $http.post('/insertNormalComment', obj).then(function(content) {
-                $scope.comments.unshift(content.data.file);
-                $scope.comment = '';
+            $scope.comments.unshift(content.data.file);
+            $scope.comment = '';
         });
     };
 });

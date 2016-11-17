@@ -243,10 +243,10 @@ body {
 .registerPopUp {
     height: 250px;
     max-width: 500px;
-    display: flex;
+    /*display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    text-align: center;*/
 }
 
 .text-center {
