@@ -12,10 +12,10 @@
         </div>
         <div class="navbar-collapse collapse" uib-collapse="navbarCollapsed">
             <ul class="nav navbar-nav navbar-right">
-                <li><a ng-click="addLink()"><span class="glyphicon glyphicon-link"></span> Add Link</a></li>
-                <li ng-if="log===true"><a href="#/favorites"><span class="glyphicon glyphicon-user"></span> Favorites</a></li>
-                <li ng-if="log===false"><a ng-click="login()"><span class="glyphicon glyphicon-log-in"></span> Login / Signup</a></li>
-                <li ng-if="log===true"><a ng-click="logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                <li><a class="hover" ng-click="addLink()"><span class="glyphicon glyphicon-link"></span> Add Link</a></li>
+                <li class="hover" ng-if="log===true"><a href="#/favorites"><span class="glyphicon glyphicon-user"></span> Favorites</a></li>
+                <li class="hover" ng-if="log===false"><a ng-click="login()"><span class="glyphicon glyphicon-log-in"></span> Login / Signup</a></li>
+                <li class="hover" ng-if="log===true"><a ng-click="logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
         </div>
     </div>
