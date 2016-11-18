@@ -13,3 +13,5 @@ Used stack:
 * Node.js
 * Angular.js (v1)
 * Bootstrap 
+
+Demo link: https://linkbin.herokuapp.com/#/
