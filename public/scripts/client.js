@@ -179,10 +179,8 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
     $scope.getReplies = function($event) {
         var parentId = parseInt($event.target.closest("div .commentContainer").id.split('-')[1]);
         for (var i = 0; i < $scope.comments.length; i++) {
-            console.log('hey');
             if ($scope.comments[i].id === parentId) {
                 var place = i;
-                console.log('place');
                 if($scope.comments[i].replies) {
                     $scope.comments[i].replies = "";
                     $scope.comments[i].closeReplies = false;
@@ -223,7 +221,7 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
         }
         else {
             $scope.noText = false;
-            var parentId = parseInt($event.path[2].id.split('-')[1]);
+            var parentId = parseInt($event.target.closest("div .commentContainer").id.split('-')[1]);
             var linkId = $routeParams.id;
             var obj = {
                 'comment': comment,
