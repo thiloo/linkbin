@@ -163,14 +163,15 @@ linkbinApp.controller('singleLinkView', function($scope, $http, $routeParams, $u
     };
     $scope.load();
     $scope.addVote = function($event) {
-        var id = $event.target.closest("div .spLinkContainer");
+        var id = $event.target.closest("div .spLinkContainer").id.split('-')[1];
         $http.post(`/addVote/${id}`).then(function(result) {
             $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
     $scope.removeVote = function($event) {
-        var id = $event.target.closest("div .spLinkContainer");
+        var id = $event.target.closest("div .spLinkContainer").id.split('-')[1];
         $http.post(`/removeVote/${id}`).then(function(result) {
+            console.log(result);
             $rootScope.userVotes = result.data.file[0].voted_links;
         });
     };
